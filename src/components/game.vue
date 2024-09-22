@@ -2,17 +2,17 @@
   <div id="pro"></div>
 </template>
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import Phaser from 'phaser';
+import { onBeforeUnmount, onMounted } from 'vue';
+import Phaser, { Game } from 'phaser';
 import { MainScene} from '../core/game/scenes/MainScene';
 
 const emit = defineEmits(["mounted"]);
-
+let game:Game | undefined = undefined;
 onMounted(() => {
-  new Phaser.Game({
+  game = new Phaser.Game({
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: 640,
+   height: 480,
     parent: 'pro',
     backgroundColor: '#ffffff',
     render: {
@@ -22,8 +22,16 @@ onMounted(() => {
     scene: [MainScene],
   });
   emit("mounted");
-
+  
 });
+
+onBeforeUnmount(() => {
+  if (game) {
+    game.destroy(true);
+    game = undefined;
+  }
+})
+
 </script>
 
 <style scoped>

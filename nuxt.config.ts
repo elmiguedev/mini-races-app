@@ -5,5 +5,10 @@ export default defineNuxtConfig({
   srcDir: 'src/',
   ignore: ['/src/pages/**/components/**'],
   modules: ['@nuxtjs/tailwindcss'],
-  ssr: false
+  ssr: false,
+  nitro: {
+    experimental: {
+      websocket: true
+    }
+  },
 })
