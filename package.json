@@ -12,10 +12,16 @@
   "dependencies": {
     "@nuxtjs/tailwindcss": "^6.12.1",
     "nuxt": "^3.13.0",
+    "pg": "^8.13.0",
     "phaser": "^3.85.2",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
+    "typeorm": "^0.3.20",
     "vue": "latest",
     "vue-router": "latest"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup-plugin-typescript2": "^0.36.0"
   }
 }
