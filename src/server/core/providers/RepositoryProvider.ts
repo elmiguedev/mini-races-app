@@ -3,6 +3,8 @@ import { PgUserRepository } from "../infrastructure/repositories/user/PgUserRepo
 import { UserRepository } from "../infrastructure/repositories/user/UserRepository";
 
 export class RepositoryProvider {
+  // db
+  private db: MiniRacesDB;
 
   // repositories
   public userRepository: UserRepository;
@@ -18,8 +20,12 @@ export class RepositoryProvider {
 
   // intialize repositories
   private constructor() {
-    const db = new MiniRacesDB();
-    this.userRepository = new PgUserRepository(db);
-    db.init();
+    this.db = new MiniRacesDB();
+    this.userRepository = new PgUserRepository(this.db);
+
+  }
+
+  public init() {
+    this.db.init();
   }
 }

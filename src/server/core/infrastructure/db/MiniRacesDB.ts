@@ -19,9 +19,8 @@ export class MiniRacesDB {
     })
   }
 
-  public async init() {
-    await this.dataSource.initialize();
-    console.log(">> database initialized");
+  public init() {
+    return this.dataSource.initialize();
   }
 
   public getRepository(entity: any) {
