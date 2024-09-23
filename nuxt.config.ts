@@ -10,7 +10,16 @@ export default defineNuxtConfig({
   ssr: false,
   nitro: {
     rollupConfig: {
-      plugins: [rollupPluginTs()],
+      // @ts-ignore
+      plugins: [
+        rollupPluginTs({
+          tsconfig: './tsconfig.json', // Asegurarte de que Rollup esté usando el archivo tsconfig correcto
+          target: "ES2020", // Igual al que tenés en el tsconfig.json
+          experimentalDecorators: true,
+          emitDecoratorMetadata: true,
+          verbatimModuleSyntax: false
+        })
+      ],
     },
     experimental: {
       websocket: true,

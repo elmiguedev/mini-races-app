@@ -1,3 +1,14 @@
 {
   "extends": "../../.nuxt/tsconfig.server.json",
+  "compilerOptions": {
+    "target": "ES2020", // Cambiar el target para soportar decoradores modernos
+    "module": "ESNext", // Asegurarte de usar un módulo moderno
+    "experimentalDecorators": true, // Habilitar decoradores
+    "emitDecoratorMetadata": true, // Necesario para usar decoradores con TypeORM
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+  }
 }

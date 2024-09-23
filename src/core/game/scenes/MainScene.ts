@@ -5,14 +5,14 @@ import { Track } from "../entities/Track";
 
 export class MainScene extends Scene {
   private controls!: Phaser.Types.Input.Keyboard.CursorKeys;
-  private otherControls: {
+  private otherControls!: {
     up: Phaser.Input.Keyboard.Key;
     down: Phaser.Input.Keyboard.Key;
     left: Phaser.Input.Keyboard.Key;
     right: Phaser.Input.Keyboard.Key;
   }
   private car!: Car;
-  private otherCar: Car;
+  private otherCar!: Car;
   private track!: Track;
 
   constructor() {
