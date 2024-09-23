@@ -15,11 +15,14 @@ export class PgUserRepository implements UserRepository {
   public async create(user: User): Promise<User> {
     return this.repository.save(user);
   }
-  public async findByCredentials(username: string, password: string): Promise<User> {
-    throw new Error("Method not implemented.");
+  public async findByEmail(email: string): Promise<User> {
+    const user = await this.repository.findOne({ where: { email } }) as User;
+    return user;
   }
+
   public async findById(id: string): Promise<User> {
-    throw new Error("Method not implemented.");
+    const user = await this.repository.findOne({ where: { id } }) as User;
+    return user;
   }
 
   public async getAll(): Promise<User[]> {

@@ -26,11 +26,24 @@ import Button from "../../components/ui/Button.vue";
 const username = ref('')
 const password = ref('')
 
-const submitForm = () => {
-  console.log('Username:', username.value)
-  console.log('Password:', password.value)
-  // Aquí podrías hacer la lógica para autenticar al usuario
+const submitForm = async () => {
+  console.log(">> inicializando creacion del user")
+  const response = await fetch("/api/users/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: username.value,
+      password: password.value,
+    }),
+  });
+  const user = await response.json();
+  console.log(" >> el user", user);
 }
+
+
+
 </script>
 
 <style scoped>

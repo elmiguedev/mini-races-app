@@ -1,4 +1,6 @@
+import { GetUserAction } from "../actions/users/GetUserAction";
 import { GetUsersAction } from "../actions/users/GetUsersAction";
+import { LoginAction } from "../actions/users/LoginAction";
 import { RegisterUserAction } from "../actions/users/RegisterUserAction";
 import { RepositoryProvider } from "./RepositoryProvider";
 
@@ -7,6 +9,8 @@ export class ActionProvider {
   // actions
   public registerUserAction: RegisterUserAction;
   public getUsersAction: GetUsersAction;
+  public getUserAction: GetUserAction;
+  public loginAction: LoginAction;
 
   // singleton
   private static instance: ActionProvider;
@@ -22,5 +26,7 @@ export class ActionProvider {
     const userRepository = RepositoryProvider.getInstance().userRepository;
     this.registerUserAction = new RegisterUserAction(userRepository);
     this.getUsersAction = new GetUsersAction(userRepository);
+    this.getUserAction = new GetUserAction(userRepository);
+    this.loginAction = new LoginAction(userRepository);
   }
 }
