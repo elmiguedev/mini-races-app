@@ -29,10 +29,27 @@ export class MainScene extends Scene {
 
     this.createSocket();
     this.createControls();
+    this.createSceneEvents();
   }
 
   public override update() {
     this.checkControls();
+  }
+
+  private createSceneEvents() {
+    this.events.on("shutdown", () => {
+      this.closeSocket();
+    })
+    this.events.on("destroy", () => {
+      this.closeSocket();
+    })
+  }
+
+  private closeSocket() {
+    if (this.socket) {
+      this.socket.close();
+    }
+
   }
 
   private createSocket() {
@@ -124,5 +141,6 @@ export class MainScene extends Scene {
       });
     }
   }
+
 
 }
