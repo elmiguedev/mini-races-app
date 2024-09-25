@@ -7,18 +7,9 @@ import io from "socket.io-client";
 import type { Car } from "../../domain/user/Car";
 
 export class MainScene extends Scene {
-  private controls!: Phaser.Types.Input.Keyboard.CursorKeys;
-  private otherControls!: {
-    up: Phaser.Input.Keyboard.Key;
-    down: Phaser.Input.Keyboard.Key;
-    left: Phaser.Input.Keyboard.Key;
-    right: Phaser.Input.Keyboard.Key;
-  }
-  private car!: Car;
-  private otherCar!: Car;
-  private track!: Track;
 
-  // aca van los atributos nuevos
+  private controls!: Phaser.Types.Input.Keyboard.CursorKeys;
+  private track!: Track;
   private mainCar!: CarEntity;
   private socket!: Socket;
   private cars!: CarEntity[];
@@ -33,14 +24,7 @@ export class MainScene extends Scene {
 
   public create() {
     this.cars = [];
-    // this.car = new Car(this);
-    // this.otherCar = new Car(this);
-    // this.otherControls = {
-    //   up: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-    //   down: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-    //   left: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-    //   right: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D),
-    // }
+
     this.track = new Track(this);
 
     this.createSocket();
@@ -48,13 +32,7 @@ export class MainScene extends Scene {
   }
 
   public override update() {
-
     this.checkControls();
-    // this.track.validateCheckpointOverlap(this.car);
-    // this.track.validateCheckpointOverlap(this.otherCar);
-
-    // this.validatePositions();
-
   }
 
   private createSocket() {
@@ -145,20 +123,6 @@ export class MainScene extends Scene {
         y: this.mainCar.sprite.y
       });
     }
-  }
-
-  private validatePositions() {
-    // const cars = [this.car, this.otherCar];
-    // cars.sort((a, b) => {
-    //   return (a.laps - b.laps === 0 ?
-    //     ((a.checkpoint - b.checkpoint) === 0
-    //       ? b.checkpointTime - a.checkpointTime
-    //       : a.checkpoint - b.checkpoint)
-    //     : a.laps - b.laps);
-    // });
-    // cars.forEach((car, index) => {
-    //   car.setRacePosition(index);
-    // });
   }
 
 }

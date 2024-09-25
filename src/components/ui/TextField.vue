@@ -6,13 +6,14 @@
     </span>
 
     <!-- Input -->
-    <input v-bind="$attrs" :class="[
+    <input :class="[
       'w-full px-4 py-2 text-black font-mono bg-white border border-black rounded-md',
-      `border-${borderStyle}`,  // dashed, dotted
+      `border-${borderStyle}`, 
       leftIcon ? 'pl-10' : '',
       rightIcon ? 'pr-10' : '',
       'focus:outline-none'
     ]" 
+     v-bind="$attrs"
     :placeholder="placeholder"
     v-model="inputValue"
     />
@@ -44,8 +45,7 @@ const props = defineProps({
   },
   borderStyle: {
     type: String,
-    default: 'solid',
-    validator: (value: string) => ['solid', 'dashed', 'dotted'].includes(value)
+    default: 'dashed',
   }
 });
 

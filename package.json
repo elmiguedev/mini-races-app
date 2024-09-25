@@ -13,6 +13,7 @@
     "@nuxtjs/tailwindcss": "^6.12.1",
     "bcrypt": "^5.1.1",
     "nuxt": "^3.13.0",
+    "nuxt-auth-utils": "^0.3.9",
     "pg": "^8.13.0",
     "phaser": "^3.85.2",
     "socket.io": "^4.7.5",

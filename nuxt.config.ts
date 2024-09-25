@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   srcDir: 'src/',
   ignore: ['/src/pages/**/components/**'],
-  modules: ['@nuxtjs/tailwindcss'],
+  modules: ['@nuxtjs/tailwindcss', 'nuxt-auth-utils'],
   ssr: false,
   nitro: {
     rollupConfig: {

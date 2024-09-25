@@ -22,9 +22,11 @@ import { ref } from 'vue'
 
 import TextField from "../../components/ui/TextField.vue";
 import Button from "../../components/ui/Button.vue";
+import { routerKey } from 'vue-router';
 
 const username = ref('')
 const password = ref('')
+const router = useRouter();
 
 const submitForm = async () => {
   console.log(">> inicializando creacion del user")
@@ -38,8 +40,12 @@ const submitForm = async () => {
       password: password.value,
     }),
   });
-  const user = await response.json();
-  console.log(" >> el user", user);
+
+  if (!response.ok) {
+    router.push({ name: 'home' })
+  } else {
+    console.log("ERROR");
+  }
 }
 
 

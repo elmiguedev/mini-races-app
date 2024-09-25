@@ -9,7 +9,7 @@
           <TextField v-model="username" border-style="dashed" placeholder="user" />
         </div>
         <div class="mb-6">
-          <TextField type="password" v-model="password" border-style="dashed" placeholder="password" />
+          <TextField type="password" border-style="dashed" v-model="password" placeholder="password" />
         </div>
         <Button type="submit" :loading="loading">Login</Button>
       </form>
@@ -19,43 +19,39 @@
 
 <script setup>
 import { ref } from 'vue'
-
 import TextField from "../../components/ui/TextField.vue";
 import Button from "../../components/ui/Button.vue";
 
 const username = ref('')
 const password = ref('')
 const loading = ref(false)
+const router = useRouter();
+const { fetch } = useUserSession(); // Asegurate de tener algo como esto en tu composable o utilidad
 
 const submitForm = async () => {
+  loading.value = true;
   try {
-    loading.value = true;
-    const response = await fetch("/api/auth/login", {
+    const body = {
+      email: username.value,
+      password: password.value,
+    };
+
+    // Enviar solicitud de login
+    await $fetch("/api/auth/login", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: username.value,
-        password: password.value,
-      }),
+      body,
     });
-    if (response.ok) {
-      const user = await response.json();
-      console.log(">> el user", user);
-    } else {
-      const error = await response.json();
-      console.log(">> error", error);
-    }
-  }  catch (error) {
-    console.log(">> error", error);
-  } finally {
+
+    // Refrescar la sesión del usuario para asegurarnos que está actualizado
+    await fetch(); // Esto asegura que el middleware capture la nueva sesión
+
+    // Redirigir después del login exitoso
+    router.push("/")
+    loading.value = false;
+  } catch (error) {
+    console.log({ error });
+    alert(error.statusMessage || error);
     loading.value = false;
   }
-  
 }
 </script>
-
-<style scoped>
-/* Puedes personalizar aún más los estilos si es necesario */
-</style>
