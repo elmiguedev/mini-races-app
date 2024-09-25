@@ -15,11 +15,11 @@
       Game
     </RouterLink>
     <RouterLink 
-      to="/about" 
+      to="/logout" 
       class="text-black px-4 py-2 transition-all  hover:text-gray-700"
-      :class="{ 'font-bold text-gray-800': $route.path === '/about' }"
+      :class="{ 'font-bold text-gray-800': $route.path === '/logout' }"
     >
-      About
+      Logout
     </RouterLink>
   </nav>
 </template>

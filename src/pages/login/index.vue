@@ -13,6 +13,13 @@
         </div>
         <Button type="submit" :loading="loading">Login</Button>
       </form>
+      <RouterLink 
+        to="/register" 
+        class="flex w-full text-center justify-center items-center mt-4 cursor-pointer decoration-solid underline decoration-black"
+        :class="{ 'font-bold text-gray-800': $route.path === '/register' }"
+      >
+        Register
+     </RouterLink>
     </div>
   </div>
 </template>

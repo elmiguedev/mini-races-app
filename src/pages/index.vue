@@ -1,27 +1,12 @@
 <template>
-  <header>
-    <template v-if="loggedIn">
-      <p>
-        Hi
-        {{ user }},
-      </p>
-      <p @click="logout">Log out</p>
-    </template>
-    <p v-else>Hi Guest, <nuxt-link :to="{ name: 'login' }">Login</nuxt-link></p>
-  </header>
+  <section class="flex items-center justify-center ">
+    <h1 class="text-3xl">Hola {{ user?.name }}!</h1>
+  </section>
 </template>
 
 <script setup lang="ts">
-const { loggedIn, user, clear, fetch } = useUserSession();
-// definePageMeta({
-//   middleware: ["auth"]
-// })
+const { user, fetch } = useUserSession();
 
-fetch()
-const logout = () => {
-  clear().then(() => {
-    navigateTo("/login");
-  })
-};
+// fetch()
 
 </script>
