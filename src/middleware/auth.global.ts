@@ -1,5 +1,6 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-  const { loggedIn } = useUserSession();
+  const session = useUserSession();
+  console.log(">> session", session);
   // const anonymousRoutes = ['/register', '/login'];
 
   // // Si el usuario no está logueado y no está yendo a /login, redirigir a /login
