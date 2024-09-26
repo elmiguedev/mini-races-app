@@ -43,6 +43,8 @@ const submitForm = async () => {
       password: password.value,
     };
 
+    console.log(">> login body", body);
+
     // Enviar solicitud de login
     await $fetch("/api/auth/login", {
       method: "POST",
