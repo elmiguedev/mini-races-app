@@ -28,5 +28,14 @@ export default defineNuxtConfig({
   },
   tailwindcss: {
     viewer: false,
+  },
+  auth: {
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',  // Usa 'Secure' solo en producción
+      sameSite: process.env.NODE_ENV === 'production' ? 'Lax' : 'Strict', // Configuración de SameSite
+      path: '/',
+      httpOnly: true,
+      domain: '.traefik.me',
+    }
   }
 })
