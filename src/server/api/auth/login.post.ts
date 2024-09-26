@@ -2,10 +2,7 @@ import { ActionProvider } from "../../core/providers/ActionProvider";
 
 export default defineEventHandler(async (event) => {
   try {
-    const body = await readBody(event); // Retrieve request body
-
-    console.log(">> login body", body);
-
+    const body = await readBody(event);
     if (!body) {
       console.error("Request body is empty or undefined");
       return createError({
@@ -30,9 +27,6 @@ export default defineEventHandler(async (event) => {
       password: body.password
     });
 
-    console.log(">> login user after action", user);
-
-    // For security reasons, do not specify if username or password is incorrect
     if (!user) {
       setResponseStatus(event, 401);
       return {
@@ -44,8 +38,6 @@ export default defineEventHandler(async (event) => {
         name: user?.name,
         id: user?.id
       };
-
-      console.log(">> user data after login", userData);
 
       await setUserSession(event, {
         user: userData,

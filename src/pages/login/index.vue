@@ -33,7 +33,7 @@ const username = ref('')
 const password = ref('')
 const loading = ref(false)
 const router = useRouter();
-const { fetch, user } = useUserSession(); // Asegurate de tener algo como esto en tu composable o utilidad
+const { fetch } = useUserSession(); // Asegurate de tener algo como esto en tu composable o utilidad
 
 const submitForm = async () => {
   loading.value = true;
@@ -43,20 +43,14 @@ const submitForm = async () => {
       password: password.value,
     };
 
-    console.log(">> login body", body);
-
     // Enviar solicitud de login
     await $fetch("/api/auth/login", {
       method: "POST",
       body,
     });
 
-    // Refrescar la sesión del usuario para asegurarnos que está actualizado
-    await fetch(); // Esto asegura que el middleware capture la nueva sesión
+    await fetch();
 
-    console.log(">> user", user)
-
-    // Redirigir después del login exitoso
     router.push("/")
     loading.value = false;
   } catch (error) {
