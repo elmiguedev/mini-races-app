@@ -122,7 +122,7 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
     podium: [],
     status: "pending",
     cars: [],
-    carsLength: 2
+    carsLength: 1
   }
 
   // 1. creamos los checkpoinst
@@ -197,6 +197,25 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
         validatePositions(race.cars);
       }
       io.emit("car_status", car);
+    });
+
+    socket.on("car_controls", (data) => {
+      const car = race.cars.find((c: Car) => c.id === socket.id);
+      if (car) {
+        if (data.up) {
+          car.y -= 4;
+        }
+        if (data.left) {
+          car.x -= 4;
+        }
+        if (data.right) {
+          car.x += 4;
+        }
+        if (data.down) {
+          car.y += 4;
+        }
+        io.emit("car_status", car);
+      }
     });
 
 

@@ -129,35 +129,47 @@ export class MainScene extends Scene {
   private checkControls() {
     if (this.controls.left.isDown) {
       this.mainCar.moveLeft();
-      this.socket.emit("car_move", {
-        id: this.socket.id,
-        x: this.mainCar.sprite.x,
-        y: this.mainCar.sprite.y
+      // this.socket.emit("car_move", {
+      //   id: this.socket.id,
+      //   x: this.mainCar.sprite.x,
+      //   y: this.mainCar.sprite.y
+      // })
+      this.socket.emit("car_controls", {
+        left: true
       })
     }
     if (this.controls.right.isDown) {
       this.mainCar.moveRight();
-      this.socket.emit("car_move", {
-        id: this.socket.id,
-        x: this.mainCar.sprite.x,
-        y: this.mainCar.sprite.y
+      // this.socket.emit("car_move", {
+      //   id: this.socket.id,
+      //   x: this.mainCar.sprite.x,
+      //   y: this.mainCar.sprite.y
+      // })
+      this.socket.emit("car_controls", {
+        right: true
       })
     }
     if (this.controls.up.isDown) {
       this.mainCar.moveUp();
-      this.socket.emit("car_move", {
-        id: this.socket.id,
-        x: this.mainCar.sprite.x,
-        y: this.mainCar.sprite.y
+      // this.socket.emit("car_move", {
+      //   id: this.socket.id,
+      //   x: this.mainCar.sprite.x,
+      //   y: this.mainCar.sprite.y
+      // })
+      this.socket.emit("car_controls", {
+        up: true
       })
     }
     if (this.controls.down.isDown) {
       this.mainCar.moveDown();
-      this.socket.emit("car_move", {
-        id: this.socket.id,
-        x: this.mainCar.sprite.x,
-        y: this.mainCar.sprite.y
-      });
+      // this.socket.emit("car_move", {
+      //   id: this.socket.id,
+      //   x: this.mainCar.sprite.x,
+      //   y: this.mainCar.sprite.y
+      // });
+      this.socket.emit("car_controls", {
+        down: true
+      })
     }
   }
 
