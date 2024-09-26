@@ -28,12 +28,5 @@ export default defineNuxtConfig({
   },
   tailwindcss: {
     viewer: false,
-  },
-  vite: {
-    build: {
-      minify: false,
-      cssMinify: false,
-
-    }
   }
 })
