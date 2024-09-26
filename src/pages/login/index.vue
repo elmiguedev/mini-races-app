@@ -33,7 +33,7 @@ const username = ref('')
 const password = ref('')
 const loading = ref(false)
 const router = useRouter();
-const { fetch } = useUserSession(); // Asegurate de tener algo como esto en tu composable o utilidad
+const { fetch, user } = useUserSession(); // Asegurate de tener algo como esto en tu composable o utilidad
 
 const submitForm = async () => {
   loading.value = true;
@@ -53,6 +53,8 @@ const submitForm = async () => {
 
     // Refrescar la sesión del usuario para asegurarnos que está actualizado
     await fetch(); // Esto asegura que el middleware capture la nueva sesión
+
+    console.log(">> user", user)
 
     // Redirigir después del login exitoso
     router.push("/")
