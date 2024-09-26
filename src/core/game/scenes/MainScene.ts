@@ -14,6 +14,8 @@ export class MainScene extends Scene {
   private socket!: Socket;
   private cars!: CarEntity[];
   private txtCountdown!: Phaser.GameObjects.Text;
+  public walls!: Phaser.Physics.Arcade.Group;
+
 
   constructor() {
     super("MainScene");
@@ -32,6 +34,15 @@ export class MainScene extends Scene {
     this.createControls();
     this.createSceneEvents();
     this.createCountdownText();
+
+
+    this.walls = this.physics.add.group({
+      immovable: true
+    });
+    const r = this.add.rectangle(0, 0, 100, 1000, 0xff0000).setOrigin(0).setDepth(20);
+    this.physics.add.existing(r);
+    this.walls.add(r);
+
   }
 
   public override update() {
@@ -80,7 +91,7 @@ export class MainScene extends Scene {
     this.socket.on("car_status", (data) => {
 
       if (data.id === this.socket.id) {
-        this.mainCar.setState(data);
+        // this.mainCar.setState(data);
       } else {
         const car = this.cars.find((c) => c.state.id === data.id);
         if (car) {
@@ -117,6 +128,8 @@ export class MainScene extends Scene {
     if (carState.id === this.socket.id) {
       this.mainCar = carEntity;
       this.cameras.main.startFollow(this.mainCar.sprite);
+      this.physics.add.collider(this.walls, this.mainCar.sprite);
+
     } else {
       this.cars.push(carEntity);
     }
@@ -127,48 +140,52 @@ export class MainScene extends Scene {
   }
 
   private checkControls() {
+    if (this.mainCar)
+      this.mainCar.stop();
     if (this.controls.left.isDown) {
-      this.mainCar.moveLeft();
+      // this.mainCar.moveLeft();
       // this.socket.emit("car_move", {
       //   id: this.socket.id,
       //   x: this.mainCar.sprite.x,
       //   y: this.mainCar.sprite.y
       // })
-      this.socket.emit("car_controls", {
-        left: true
-      })
+      this.mainCar.sprite.body.setAngularVelocity(-150);
     }
     if (this.controls.right.isDown) {
-      this.mainCar.moveRight();
+      // this.mainCar.moveRight();
       // this.socket.emit("car_move", {
       //   id: this.socket.id,
       //   x: this.mainCar.sprite.x,
       //   y: this.mainCar.sprite.y
       // })
-      this.socket.emit("car_controls", {
-        right: true
-      })
+      this.mainCar.sprite.body.setAngularVelocity(150);
+
     }
     if (this.controls.up.isDown) {
-      this.mainCar.moveUp();
+      // this.mainCar.moveUp();
       // this.socket.emit("car_move", {
       //   id: this.socket.id,
       //   x: this.mainCar.sprite.x,
       //   y: this.mainCar.sprite.y
       // })
-      this.socket.emit("car_controls", {
-        up: true
-      })
+      this.physics.velocityFromAngle(this.mainCar.sprite.body.rotation, 1200, this.mainCar.sprite.body.acceleration);
+
     }
     if (this.controls.down.isDown) {
-      this.mainCar.moveDown();
+      // this.mainCar.moveDown();
       // this.socket.emit("car_move", {
       //   id: this.socket.id,
       //   x: this.mainCar.sprite.x,
       //   y: this.mainCar.sprite.y
       // });
-      this.socket.emit("car_controls", {
-        down: true
+
+    }
+
+    if (this.mainCar) {
+      this.socket.emit("car_move", {
+        id: this.socket.id,
+        x: this.mainCar.sprite.x,
+        y: this.mainCar.sprite.y
       })
     }
   }

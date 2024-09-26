@@ -24,6 +24,12 @@ onMounted(() => {
       MainScene,
       PodiumScene
     ],
+    physics: {
+      default: 'arcade',
+      arcade: {
+        debug: true
+      }
+    }
   });
   emit("mounted");
   
