@@ -26,17 +26,14 @@ export default defineNuxtConfig({
       typescriptBundlerResolution: true
     }
   },
-  vite: {
-    build: {
-      target: 'esnext',
-      cssCodeSplit: false,
-      minify: 'terser',
-      rollupOptions: {
-        maxParallelFileOps: 1
-      }
-    }
-  },
   tailwindcss: {
     viewer: false,
+  },
+  vite: {
+    build: {
+      minify: false,
+      cssMinify: false,
+
+    }
   }
 })
