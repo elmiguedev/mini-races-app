@@ -13,6 +13,7 @@ export class MainScene extends Scene {
   private mainCar!: CarEntity;
   private socket!: Socket;
   private cars!: CarEntity[];
+  private txtCountdown!: Phaser.GameObjects.Text;
 
   constructor() {
     super("MainScene");
@@ -30,6 +31,7 @@ export class MainScene extends Scene {
     this.createSocket();
     this.createControls();
     this.createSceneEvents();
+    this.createCountdownText();
   }
 
   public override update() {
@@ -87,6 +89,23 @@ export class MainScene extends Scene {
       }
     });
 
+    this.socket.on("race_finished", (podium: Car[]) => {
+      console.log(">> race finished");
+
+      this.scene.start("PodiumScene", podium);
+    });
+
+    this.socket.on("race_countdown", () => {
+      this.startCountdown();
+    });
+
+    this.socket.on("race_start", () => {
+      this.txtCountdown.setText("GO GO GO");
+      setTimeout(() => {
+        this.txtCountdown.setVisible(false);
+      }, 3000);
+    });
+
 
   }
 
@@ -140,6 +159,26 @@ export class MainScene extends Scene {
         y: this.mainCar.sprite.y
       });
     }
+  }
+
+  private createCountdownText() {
+    this.txtCountdown = this.add.text(200, 400, "", {
+      fontSize: "32px",
+      color: "black"
+    }).setOrigin(0.5).setDepth(10);
+  }
+
+  private startCountdown() {
+    this.txtCountdown.setText("3");
+    setTimeout(() => {
+      this.txtCountdown.setText("2");
+    }, 1000);
+    setTimeout(() => {
+      this.txtCountdown.setText("1");
+    }, 2000);
+    setTimeout(() => {
+      this.txtCountdown.setText("");
+    }, 3000);
   }
 
 

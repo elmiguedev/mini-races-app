@@ -18,7 +18,7 @@ const createCheckpoints = (): Checkpoint[] => {
   ]
 }
 
-const validateCheckpointOverlap = (checkpoints: Checkpoint[], car: Car) => {
+const validateCheckpointOverlap = (checkpoints: Checkpoint[], car: Car, race: any, callback: any) => {
   for (let i = 0; i < checkpoints.length; i++) {
     if (
       car.x >= checkpoints[i].x &&
@@ -52,6 +52,21 @@ const validateCheckpointOverlap = (checkpoints: Checkpoint[], car: Car) => {
         car.laps++;
         car.currentCheckpoint = 0;
         car.currentCheckpointTime = new Date().getTime();
+
+        if (car.laps >= race.laps) {
+          car.status = 'finished';
+          race.podium.push(car);
+          if (race.status === "pending") {
+            race.status = "finished"
+          }
+        }
+
+        // ACA TENEMOS QUE PONER LA CONDICION DE CORTE
+        if (race.podium.length === race.cars.length) {
+          callback();
+        }
+
+
         return;
       }
 
@@ -100,8 +115,15 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
 
   // TODO LO QUE ESTE ACA ABAJO
 
-  const cars: Car[] = [];
+  // const cars: Car[] = [];
   const checkpoints: Checkpoint[] = createCheckpoints();
+  const race: any = {
+    laps: 1,
+    podium: [],
+    status: "pending",
+    cars: [],
+    carsLength: 2
+  }
 
   // 1. creamos los checkpoinst
 
@@ -112,7 +134,7 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
 
     // 1. crea el car
     const randomColor = Math.floor(Math.random() * 16777215);
-    const x = 150 + (cars.length * 40);
+    const x = 150 + (race.cars.length * 40);
     const car: Car = {
       id: socket.id,
       x: x,
@@ -121,12 +143,25 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
       laps: 0,
       currentCheckpoint: 0,
       color: randomColor,
-      currentCheckpointTime: 0
+      currentCheckpointTime: 0,
+      status: "pending"
     };
-    cars.push(car);
+    race.cars.push(car);
+
+    if (race.cars.length >= race.carsLength) {
+      io.emit("race_countdown");
+      setTimeout(() => {
+        race.status = "playing";
+        race.cars.forEach((car: Car) => {
+          car.status = "playing";
+          io.emit("car_status", car);
+        });
+        io.emit("race_start");
+      }, 3000);
+    }
 
     // 2. manda el status al car nuevo
-    socket.emit("cars_status", cars);
+    socket.emit("cars_status", race.cars);
 
     // 3. avisa al resto que un auto se conecto
     io.emit("car_connected", car);
@@ -134,9 +169,9 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
     // 4. cuando se val socket al carajo, avisa
     socket.on("disconnect", () => {
       console.log(">> cliente desconectado", socket.id);
-      cars.forEach((car, index) => {
+      race.cars.forEach((car: Car, index: number) => {
         if (car.id === socket.id) {
-          cars.splice(index, 1);
+          race.cars.splice(index, 1);
         }
       });
       io.emit("car_disconnected", socket.id);
@@ -144,13 +179,22 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
 
     // 5. cuando el carajo mande el status, actualiza
     socket.on("car_move", (data) => {
-      const car = cars.find((c) => c.id === socket.id);
+      const car = race.cars.find((c: Car) => c.id === socket.id);
       if (car) {
+
         car.x = data.x;
         car.y = data.y;
 
-        validateCheckpointOverlap(checkpoints, car);
-        validatePositions(cars);
+        validateCheckpointOverlap(checkpoints, car, race, () => {
+          console.log(">> race finished");
+          io.emit("race_finished", race.podium);
+          race.laps = 1;
+          race.cars = [];
+          race.podium = [];
+          race.status = "pending";
+          race.carsLength = 2;
+        });
+        validatePositions(race.cars);
       }
       io.emit("car_status", car);
     });

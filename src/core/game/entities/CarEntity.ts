@@ -29,19 +29,23 @@ export class CarEntity {
   }
 
   public moveLeft() {
-    this.sprite.x -= 4;
+    if (this.state.status === "playing")
+      this.sprite.x -= 4;
   }
 
   public moveRight() {
-    this.sprite.x += 4;
+    if (this.state.status === "playing")
+      this.sprite.x += 4;
   }
 
   public moveUp() {
-    this.sprite.y -= 4;
+    if (this.state.status === "playing")
+      this.sprite.y -= 4;
   }
 
   public moveDown() {
-    this.sprite.y += 4;
+    if (this.state.status === "playing")
+      this.sprite.y += 4;
   }
   private createSprite() {
     this.sprite = this.scene.add.rectangle(

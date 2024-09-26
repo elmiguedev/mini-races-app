@@ -5,6 +5,7 @@
 import { onBeforeUnmount, onMounted } from 'vue';
 import Phaser, { Game } from 'phaser';
 import { MainScene} from '../core/game/scenes/MainScene';
+import { PodiumScene } from '../core/game/scenes/PodiumScene';
 
 const emit = defineEmits(["mounted"]);
 let game:Game | undefined = undefined;
@@ -19,7 +20,10 @@ onMounted(() => {
       pixelArt: true,
       transparent: true
     },
-    scene: [MainScene],
+    scene: [
+      MainScene,
+      PodiumScene
+    ],
   });
   emit("mounted");
   

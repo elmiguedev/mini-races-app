@@ -7,4 +7,5 @@ export interface Car {
   currentCheckpoint: number;
   currentCheckpointTime: number;
   color: number;
+  status: 'pending' | 'playing' | 'finished';
 }
