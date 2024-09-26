@@ -31,6 +31,9 @@ export default defineNuxtConfig({
       target: 'esnext',
       cssCodeSplit: false,
       minify: 'terser',
+      rollupOptions: {
+        maxParallelFileOps: 1
+      }
     }
   },
   tailwindcss: {
