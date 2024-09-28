@@ -58,8 +58,8 @@ export class CarEntity {
     this.sprite.setDepth(5);
     this.sprite.setOrigin(0.5);
     this.scene.physics.add.existing(this.sprite);
-    this.sprite.body.setMaxSpeed(300);
-    this.sprite.body.drag.set(200);
+    // this.sprite.body.setMaxSpeed(300);
+    // this.sprite.body.drag.set(200);
   }
 
   private createTxtInfo() {
@@ -83,11 +83,12 @@ export class CarEntity {
 
   private updateSprite() {
     this.sprite.setPosition(this.state.x, this.state.y);
+    this.sprite.setAngle(this.state.angle);
   }
 
   public stop() {
-    this.sprite.body.setAcceleration(0);
-    this.sprite.body.setAngularVelocity(0);
+    // this.sprite.body.setAcceleration(0);
+    // this.sprite.body.setAngularVelocity(0);
   }
 
 }

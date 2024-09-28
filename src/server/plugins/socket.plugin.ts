@@ -6,6 +6,7 @@ import { defineEventHandler } from "h3";
 import { initializeSocket } from "../socket";
 import { Car } from "../../core/domain/user/Car";
 import { Checkpoint } from "../../core/domain/Checkpoint";
+import { Body, BoxShape, Vec2, Vec3, World } from "planck";
 
 const createCheckpoints = (): Checkpoint[] => {
   return [
@@ -104,6 +105,61 @@ const validatePositions = (cars: Car[]) => {
   });
 }
 
+const createCar = (id: string, x: number, y: number, world: World) => {
+  const randomColor = Math.floor(Math.random() * 16777215);
+  const carState = {
+    id: id,
+    x: x,
+    y: 430,
+    racePosition: 0,
+    laps: 0,
+    currentCheckpoint: 0,
+    color: randomColor,
+    currentCheckpointTime: 0,
+    status: "pending"
+  };
+
+  const carBody = world.createBody({
+    type: 'dynamic',
+    position: Vec2(x, y),
+    angle: 0,
+    linearDamping: 0.5
+  });
+
+  carBody.createFixture({
+    shape: new BoxShape(32, 32),
+  });
+
+  return {
+    body: carBody,
+    state: carState
+  }
+
+}
+
+const moveCar = (car: any, controls: any) => {
+  const { up, left, right } = controls;
+  const carBody: Body = car.body;
+  if (up) {
+    const cosx = Math.cos(carBody.getAngle());
+    const sinx = Math.sin(carBody.getAngle());
+    const acc = 26;
+    carBody.applyLinearImpulse(
+      Vec2(cosx * acc, sinx * acc),
+      carBody.getWorldCenter(),
+    )
+  }
+
+  if (left) {
+    const currentAngle = carBody.getAngle();
+    carBody.setAngle(currentAngle - 0.05);
+  }
+
+  if (right) {
+    const currentAngle = carBody.getAngle();
+    carBody.setAngle(currentAngle + 0.05);
+  }
+}
 
 export default defineNitroPlugin((nitroApp: NitroApp) => {
   const engine = new Engine();
@@ -125,6 +181,8 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
     carsLength: 1
   }
 
+  const world: World = new World();
+
   // 1. creamos los checkpoinst
 
 
@@ -133,43 +191,32 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
     console.log(">> cliente conectado", socket.id);
 
     // 1. crea el car
-    const randomColor = Math.floor(Math.random() * 16777215);
     const x = 150 + (race.cars.length * 40);
-    const car: Car = {
-      id: socket.id,
-      x: x,
-      y: 430,
-      racePosition: 0,
-      laps: 0,
-      currentCheckpoint: 0,
-      color: randomColor,
-      currentCheckpointTime: 0,
-      status: "pending"
-    };
+    const car = createCar(socket.id, x, 430, world);
     race.cars.push(car);
 
     if (race.cars.length >= race.carsLength) {
       io.emit("race_countdown");
       setTimeout(() => {
         race.status = "playing";
-        race.cars.forEach((car: Car) => {
+        race.cars.forEach((car: any) => {
           car.status = "playing";
-          io.emit("car_status", car);
+          io.emit("car_status", car.state);
         });
         io.emit("race_start");
       }, 3000);
     }
 
     // 2. manda el status al car nuevo
-    socket.emit("cars_status", race.cars);
+    socket.emit("cars_status", race.cars.map((c: any) => c.state));
 
     // 3. avisa al resto que un auto se conecto
-    io.emit("car_connected", car);
+    io.emit("car_connected", car.state);
 
     // 4. cuando se val socket al carajo, avisa
     socket.on("disconnect", () => {
       console.log(">> cliente desconectado", socket.id);
-      race.cars.forEach((car: Car, index: number) => {
+      race.cars.forEach((car: any, index: number) => {
         if (car.id === socket.id) {
           race.cars.splice(index, 1);
         }
@@ -200,24 +247,34 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
     });
 
     socket.on("car_controls", (data) => {
-      const car = race.cars.find((c: Car) => c.id === socket.id);
-      if (car) {
-        if (data.up) {
-          car.y -= 4;
-        }
-        if (data.left) {
-          car.x -= 4;
-        }
-        if (data.right) {
-          car.x += 4;
-        }
-        if (data.down) {
-          car.y += 4;
-        }
-        io.emit("car_status", car);
-      }
+      const car = race.cars.find((c: any) => c.state.id === socket.id);
+      moveCar(car, data);
     });
 
+    const tickTime = 1000 / 60;
+    setInterval(() => {
+      // validaciones
+      if (!race) return;
+      if (!race.cars) return;
+
+      // step del mundo
+      world.step(1 / 60);
+
+      // actualiza los estados y manda el status
+      race.cars.forEach((car: any) => {
+        const carBody = car.body;
+        const carState = car.state;
+
+        carState.x = carBody.getPosition().x;
+        carState.y = carBody.getPosition().y;
+        carState.angle = carBody.getAngle() * 180 / Math.PI;
+
+        io.emit("car_status", carState);
+      })
+
+      // manda el status
+
+    }, tickTime);
 
 
   });

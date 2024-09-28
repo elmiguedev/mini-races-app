@@ -16,6 +16,7 @@
     "nuxt-auth-utils": "^0.3.9",
     "pg": "^8.13.0",
     "phaser": "^3.85.2",
+    "planck": "^1.0.5",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
     "typeorm": "^0.3.20",

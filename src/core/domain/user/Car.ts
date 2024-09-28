@@ -2,6 +2,7 @@ export interface Car {
   id: string;
   x: number;
   y: number;
+  angle: number;
   racePosition: number;
   laps: number;
   currentCheckpoint: number;

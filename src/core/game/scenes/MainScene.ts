@@ -91,7 +91,7 @@ export class MainScene extends Scene {
     this.socket.on("car_status", (data) => {
 
       if (data.id === this.socket.id) {
-        // this.mainCar.setState(data);
+        this.mainCar.setState(data);
       } else {
         const car = this.cars.find((c) => c.state.id === data.id);
         if (car) {
@@ -149,7 +149,8 @@ export class MainScene extends Scene {
       //   x: this.mainCar.sprite.x,
       //   y: this.mainCar.sprite.y
       // })
-      this.mainCar.sprite.body.setAngularVelocity(-150);
+      // this.mainCar.sprite.body.setAngularVelocity(-150);
+      this.socket.emit("car_controls", { left: true });
     }
     if (this.controls.right.isDown) {
       // this.mainCar.moveRight();
@@ -158,9 +159,10 @@ export class MainScene extends Scene {
       //   x: this.mainCar.sprite.x,
       //   y: this.mainCar.sprite.y
       // })
-      this.mainCar.sprite.body.setAngularVelocity(150);
-
+      // this.mainCar.sprite.body.setAngularVelocity(150);
+      this.socket.emit("car_controls", { right: true });
     }
+
     if (this.controls.up.isDown) {
       // this.mainCar.moveUp();
       // this.socket.emit("car_move", {
@@ -168,7 +170,8 @@ export class MainScene extends Scene {
       //   x: this.mainCar.sprite.x,
       //   y: this.mainCar.sprite.y
       // })
-      this.physics.velocityFromAngle(this.mainCar.sprite.body.rotation, 1200, this.mainCar.sprite.body.acceleration);
+      // this.physics.velocityFromAngle(this.mainCar.sprite.body.rotation, 1200, this.mainCar.sprite.body.acceleration);
+      this.socket.emit("car_controls", { up: true });
 
     }
     if (this.controls.down.isDown) {
@@ -181,13 +184,13 @@ export class MainScene extends Scene {
 
     }
 
-    if (this.mainCar) {
-      this.socket.emit("car_move", {
-        id: this.socket.id,
-        x: this.mainCar.sprite.x,
-        y: this.mainCar.sprite.y
-      })
-    }
+    // if (this.mainCar) {
+    //   this.socket.emit("car_move", {
+    //     id: this.socket.id,
+    //     x: this.mainCar.sprite.x,
+    //     y: this.mainCar.sprite.y
+    //   })
+    // }
   }
 
   private createCountdownText() {
