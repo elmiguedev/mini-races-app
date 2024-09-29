@@ -1,10 +1,11 @@
 import { Scene } from "phaser";
-import MapPng from "../assets/map.png";
+import MapPng from "../assets/img/map.png";
 import { Track } from "../entities/Track";
 import { CarEntity } from "../entities/CarEntity";
 import type { Socket } from "socket.io-client";
 import io from "socket.io-client";
 import type { Car } from "../../domain/user/Car";
+import CarPng from "../assets/sprites/car.png";
 
 export class MainScene extends Scene {
 
@@ -23,6 +24,7 @@ export class MainScene extends Scene {
 
   public preload() {
     this.load.image("map", MapPng);
+    this.load.image("car", CarPng)
   }
 
   public create() {

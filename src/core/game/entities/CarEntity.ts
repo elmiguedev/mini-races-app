@@ -4,7 +4,7 @@ import type { Car } from "../../domain/user/Car";
 export class CarEntity {
   public state: Car;
   public scene: Scene;
-  public sprite!: Phaser.GameObjects.Rectangle;
+  public sprite!: Phaser.GameObjects.Sprite;
   public txtInfo!: Phaser.GameObjects.Text;
 
   constructor(scene: Scene, state: Car) {
@@ -48,18 +48,14 @@ export class CarEntity {
       this.sprite.y += 4;
   }
   private createSprite() {
-    this.sprite = this.scene.add.rectangle(
+    this.sprite = this.scene.add.sprite(
       this.state.x,
       this.state.y,
-      32,
-      32,
-      this.state.color
+      "car",
     );
     this.sprite.setDepth(5);
     this.sprite.setOrigin(0.5);
     this.scene.physics.add.existing(this.sprite);
-    // this.sprite.body.setMaxSpeed(300);
-    // this.sprite.body.drag.set(200);
   }
 
   private createTxtInfo() {
