@@ -1,3 +1,4 @@
+import { CreateRaceAction } from "../actions/race/CreateRaceAction";
 import { GetUserAction } from "../actions/users/GetUserAction";
 import { GetUsersAction } from "../actions/users/GetUsersAction";
 import { LoginAction } from "../actions/users/LoginAction";
@@ -11,6 +12,7 @@ export class ActionProvider {
   public getUsersAction: GetUsersAction;
   public getUserAction: GetUserAction;
   public loginAction: LoginAction;
+  public createRace: CreateRaceAction;
 
   // singleton
   private static instance: ActionProvider;
@@ -28,5 +30,6 @@ export class ActionProvider {
     this.getUsersAction = new GetUsersAction(userRepository);
     this.getUserAction = new GetUserAction(userRepository);
     this.loginAction = new LoginAction(userRepository);
+    this.createRace = new CreateRaceAction();
   }
 }
