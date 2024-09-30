@@ -1,4 +1,4 @@
-import rollupPluginTs from "@rollup/plugin-typescript";
+import typescript from "@rollup/plugin-typescript";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -12,19 +12,15 @@ export default defineNuxtConfig({
     rollupConfig: {
       // @ts-ignore
       plugins: [
-        rollupPluginTs({
-          tsconfig: './tsconfig.json', // Asegurarte de que Rollup esté usando el archivo tsconfig correcto
-          target: "ES2020", // Igual al que tenés en el tsconfig.json
-          experimentalDecorators: true,
-          emitDecoratorMetadata: true,
-          verbatimModuleSyntax: false
+        typescript({
+          include: ['src/server/**/*.ts'],
+          tsconfig: 'src/server/tsconfig.json',
         })
       ],
     },
     experimental: {
       websocket: true,
-      typescriptBundlerResolution: true
-    }
+    },
   },
   tailwindcss: {
     viewer: false,

@@ -1,5 +1,6 @@
-import { ActionProvider } from "../../core/providers/ActionProvider";
-
+import { defineEventHandler, readBody, createError, setResponseStatus } from "h3"
+import { setUserSession } from "../../../../node_modules/.pnpm/nuxt-auth-utils@0.3.9_rollup@4.21.3/node_modules/nuxt-auth-utils/dist/runtime/server/utils/session";
+import { useActions } from "../../hooks/useActions";
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event);
@@ -21,8 +22,8 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const action = ActionProvider.getInstance().loginAction;
-    const user = await action.execute({
+    const { loginAction } = useActions();
+    const user = await loginAction.execute({
       email: body.email,
       password: body.password
     });

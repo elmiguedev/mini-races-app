@@ -1,8 +1,9 @@
-import { ActionProvider } from "../../core/providers/ActionProvider";
+import { defineEventHandler } from "h3"
+import { useActions } from "../../hooks/useActions";
 
 export default defineEventHandler(async (event) => {
-  const action = ActionProvider.getInstance().getUsersAction;
-  const users = await action.execute();
+  const { getUsersAction } = useActions();
+  const users = await getUsersAction.execute();
   return {
     message: users
   }

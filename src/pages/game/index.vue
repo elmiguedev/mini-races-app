@@ -21,7 +21,6 @@ import { ref } from 'vue';
 import RaceUsersTable from './components/RaceUsersTable.vue';
 import Button from '../../components/ui/Button.vue';
 import type { User } from '../../core/domain/user/User';
-import { ActionProvider } from '../../server/core/providers/ActionProvider';
 
 // page state
 const users = ref<Array<User>>([]);
@@ -29,7 +28,6 @@ const users = ref<Array<User>>([]);
 // page methods
 const createRace = () => {
   console.log('create race');
-  ActionProvider.getInstance().createRace.execute();
 }
 
 // page events

@@ -1,4 +1,5 @@
-import { ActionProvider } from "../../core/providers/ActionProvider";
+import { defineEventHandler, getRouterParam } from "h3"
+import { useActions } from "../../hooks/useActions";
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, "id");
@@ -7,7 +8,7 @@ export default defineEventHandler(async (event) => {
       message: "no hay id"
     }
   }
-  const action = ActionProvider.getInstance().getUserAction;
-  const user = await action.execute(id);
+  const { getUserAction } = useActions();
+  const user = await getUserAction.execute(id);
   return user;
 })
