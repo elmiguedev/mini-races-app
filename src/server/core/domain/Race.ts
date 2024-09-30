@@ -2,6 +2,6 @@ import { User } from "./User";
 
 export interface Race {
   id: string;
-  createdAd: Date;
+  createdAt: Date;
   users?: User[];
 }
