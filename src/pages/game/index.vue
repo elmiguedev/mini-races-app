@@ -7,7 +7,7 @@
       </Button>
     </div>
     <div>
-      <RaceUsersTable :users="users"/>
+      <RacesTable :races="races"/>
     </div>
     <!-- <div class="w-[700px] h-[500px] border-2 border-dotted border-black rounded-md p-4 mt-4 flex items-center justify-center">
       <LazyGame v-if="showGameComponent" @mounted="showGame" />
@@ -18,24 +18,28 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import RaceUsersTable from './components/RaceUsersTable.vue';
+import RacesTable from './components/RacesTable.vue';
 import Button from '../../components/ui/Button.vue';
-import type { User } from '../../core/domain/user/User';
+import type { Race } from '../../server/core/domain/Race';
 
 // page state
-const users = ref<Array<User>>([]);
+const races = ref<Array<Race>>([]);
 
 // page methods
-const createRace = () => {
-  console.log('create race');
+const createRace = async () => {
+  await $fetch("/api/races", {
+    method: "POST"
+  });
+  await getRaces();
 }
 
-// page events
+const getRaces = async () => {
+  races.value = await $fetch("/api/races");
+}
 
-// onMounted(() => {
-//   showGameComponent.value = true
-// });
-
+onMounted(async () => {
+  await getRaces();
+})
 
 </script>
 
