@@ -9,6 +9,9 @@ export default defineNitroPlugin((nitroApp: NitroApp) => {
   const engine = new Engine();
   const httpServer = nitroApp.h3App;
   const socketServer = new SocketServer(httpServer, engine);
+  // @ts-ignore
+  nitroApp.socketServer = socketServer;
+  console.log(">> Socket Plugin loaded");
 
   nitroApp.router.use("/socket.io/", defineEventHandler({
     handler(event) {

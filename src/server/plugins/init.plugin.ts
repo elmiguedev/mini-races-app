@@ -36,5 +36,5 @@ export default defineNitroPlugin(async (nitroApp: any) => {
   await db.init();
 
   // log info
-  console.log(">> Plugins loaded");
+  console.log(">> Services Plugin loaded");
 });
