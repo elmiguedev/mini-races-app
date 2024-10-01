@@ -14,7 +14,7 @@ export class InMemoryRaceRepository implements RaceRepository {
   public getAll(): Promise<Race[]> {
     return Promise.resolve(Object.values(this.cache.races));
   }
-  public findById(id: string): Promise<Race> {
+  public getById(id: string): Promise<Race | undefined> {
     return Promise.resolve(this.cache.races[id]);
   }
 

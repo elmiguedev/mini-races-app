@@ -1,5 +1,6 @@
 import { defineNitroPlugin } from "../../../node_modules/.pnpm/nitropack@2.9.7/node_modules/nitropack/dist/runtime"
 import { CreateRaceAction } from "../core/actions/race/CreateRaceAction";
+import { GetRaceAction } from "../core/actions/race/GetRaceAction";
 import { GetRacesAction } from "../core/actions/race/GetRacesAction";
 import { GetUserAction } from "../core/actions/users/GetUserAction";
 import { GetUsersAction } from "../core/actions/users/GetUsersAction";
@@ -27,6 +28,7 @@ export default defineNitroPlugin(async (nitroApp: any) => {
     loginAction: new LoginAction(userRepository),
     createRaceAction: new CreateRaceAction(inMemoryRaceRepository),
     getRacesAction: new GetRacesAction(inMemoryRaceRepository),
+    getRaceAction: new GetRaceAction(inMemoryRaceRepository)
   };
 
   // inyecto las acciones en el server

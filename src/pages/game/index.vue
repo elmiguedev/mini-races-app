@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import RacesTable from './components/RacesTable.vue';
+import RacesTable from '../races/components/RacesTable.vue';
 import Button from '../../components/ui/Button.vue';
 import type { Race } from '../../server/core/domain/Race';
 
