@@ -4,16 +4,40 @@
     <div class="mb-4 flex flex-row items-end w-100">
     </div>
     <div>
+      <ul>
+        <li v-for="user in race?.lobbyUsers">
+          {{ user.name }}
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { io } from 'socket.io-client';
 import type { Race } from '../../../server/core/domain/Race';
 const { params } = useRoute();
 const { id } = params;
-
 const race = ref<Race | undefined>();
+
+
+const socket = io();
+
+socket.on('connect', () => {
+  console.log('>> connected', socket.id);
+})
+
+socket.on('confirm_connection', () => {
+  console.log('>> confirmed', socket.id);
+  socket.emit('race_join', id);
+});
+
+socket.on("race_status", (status) => {
+  console.log(">> race status", status);
+  race.value = status;
+})
+
+
 
 const getRace = async () => {
   race.value = await $fetch(`/api/races/${id}`);

@@ -12,12 +12,7 @@ export default defineEventHandler(async (event) => {
     }
     console.log(">> el user session", user)
     const { createRaceAction } = useActions();
-    const race = await createRaceAction.execute({
-      // @ts-ignore
-      id: user.id,
-      // @ts-ignore
-      name: user.name
-    });
+    const race = await createRaceAction.execute();
     return race;
   } catch (error) {
     console.error("Error handling signup request:", error);

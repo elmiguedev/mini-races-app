@@ -11,15 +11,12 @@ export class CreateRaceAction implements Action<LobbyUser, Race> {
   constructor(private readonly raceRepository: RaceRepository) {
   }
 
-  public async execute(user: LobbyUser): Promise<Race> {
-    console.log(">> el user", user)
+  public async execute(): Promise<Race> {
     const randomIdString = this.generateId()
     const race: Race = {
       id: randomIdString,
       createdAt: new Date(),
-      lobbyUsers: [
-        user
-      ]
+      lobbyUsers: []
     };
     await this.raceRepository.create(race);
     return race;

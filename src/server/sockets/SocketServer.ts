@@ -1,19 +1,79 @@
 // @ts-ignore
 import { Server as Engine } from "engine.io";
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
+import { createEvent } from 'h3'
 
 export class SocketServer {
   private serverSocket: Server;
+  private nitroApp: any;
+  private clientHandlers: Record<string, any> = {};
+  private broadcastHandlers: Record<string, any> = {};
 
-  constructor(httpServer: any, engine: Engine) {
-    this.serverSocket = new Server(httpServer);
+  public sockets: Record<string, any> = {};
+
+  constructor(nitroApp: any) {
+    this.nitroApp = nitroApp;
+    this.serverSocket = new Server(nitroApp.h3App);
+  }
+
+  public init() {
+    const engine = new Engine();
     this.serverSocket.bind(engine);
+    this.createClientEndpoint(engine, this.nitroApp);
+
+    this.serverSocket.on("connection", (socket) => {
+
+      console.log(">> cliente conectado", socket.id);
+
+      this.authenticateUser(socket).then((user) => {
+        if (user) {
+          this.sockets[socket.id] = {
+            socket,
+            user
+          };
+          console.log(">> cliente confirmado", user);
+          socket.emit("confirm_connection", user);
+        } else {
+          socket.disconnect(true);
+        }
+      });
+
+      this.connectClientHandlers(socket);
+
+
+    })
   }
 
   public emitToRoom(room: string, event: string, data: any) {
     this.serverSocket.to(room).emit(event, data);
   }
 
+  public addSocketHandler(message: string, handler: any) {
+    this.clientHandlers[message] = handler;
+    // this.serverSocket.on(message, (data: any) => {
+    //   handler(data);
+    // });
+  }
+
+  public addBroadcastHandler(message: string, handler: any) {
+    this.broadcastHandlers[message] = handler;
+  }
+
+  private connectClientHandlers(socket: Socket) {
+    for (const message in this.clientHandlers) {
+      socket.on(message, (data: any) => {
+        this.clientHandlers[message].handle(socket, data);
+      });
+    }
+  }
+
+  private connectBroadcastHandlers() {
+    for (const message in this.broadcastHandlers) {
+      this.serverSocket.on(message, (data: any) => {
+        this.broadcastHandlers[message](data);
+      });
+    }
+  }
   // // 2. inicializamos el socket
   // io.on("connection", (socket) => {
   //   console.log(">> cliente conectado", socket.id);
@@ -106,5 +166,42 @@ export class SocketServer {
 
 
   // });
+
+  private createClientEndpoint(engine: Engine, nitroApp: any) {
+    nitroApp.router.use("/socket.io/", defineEventHandler({
+      handler(event) {
+        engine.handleRequest(event.node.req, event.node.res);
+        event._handled = true;
+      },
+      websocket: {
+        open(peer) {
+          const nodeContext = peer.ctx.node;
+          const req = nodeContext.req;
+
+          engine.prepare(req);
+
+          const rawSocket = nodeContext.req.socket;
+          const websocket = nodeContext.ws;
+
+          engine.onWebSocket(req, rawSocket, websocket);
+        }
+      }
+    }));
+  }
+
+  private async authenticateUser(socket: Socket) {
+    try {
+      // Obtener el token de los parámetros de conexión del socket
+      const cookie = socket.handshake.headers.cookie as string;
+      if (!cookie) return null;
+      const event = createEvent(socket.request, {} as any);
+      // Obtener el usuario de la sesión usando el evento simulado
+      const { user } = await getUserSession(event);
+      return user;
+    } catch (error) {
+      console.error('Error en la autenticación del socket:', error);
+      return null;
+    }
+  }
 
 }

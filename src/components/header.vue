@@ -8,11 +8,11 @@
       Home
     </RouterLink>
     <RouterLink 
-      to="/game" 
+      to="/races" 
       class="text-black px-4 py-2 transition-all  hover:text-gray-700"
-      :class="{ 'font-bold text-gray-800': $route.path === '/game' }"
+      :class="{ 'font-bold text-gray-800': $route.path === '/races' }"
     >
-      Game
+      Races
     </RouterLink>
     <RouterLink 
       to="/logout" 
