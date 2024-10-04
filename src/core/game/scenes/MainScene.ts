@@ -68,7 +68,11 @@ export class MainScene extends Scene {
   }
 
   private createSocket() {
-    this.socket = io();
+    // this.socket = io();
+    this.socket = this.registry.get("socket");
+    if (!this.socket) {
+      throw new Error("Socket not initialized");
+    }
 
     this.socket.on("cars_status", (cars: Car[]) => {
       cars.forEach((car) => {

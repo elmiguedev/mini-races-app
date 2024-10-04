@@ -10,6 +10,10 @@
         </li>
       </ul>
     </div>
+    <button @click="handleStart">start</button>
+    <div v-if="showGame">
+      <Game :socket="socket" :race="race" />
+    </div>
   </div>
 </template>
 
@@ -19,7 +23,7 @@ import type { Race } from '../../../server/core/domain/Race';
 const { params } = useRoute();
 const { id } = params;
 const race = ref<Race | undefined>();
-
+const showGame = ref(false);
 
 const socket = io();
 
@@ -37,6 +41,10 @@ socket.on("race_status", (status) => {
   race.value = status;
 })
 
+
+const handleStart = () => {
+  showGame.value = true
+}
 
 
 const getRace = async () => {
