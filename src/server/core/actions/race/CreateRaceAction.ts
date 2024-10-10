@@ -1,12 +1,10 @@
-import { LobbyUser } from "../../domain/LobbyUser";
-import { Race } from "../../domain/Race";
-import { User } from "../../domain/User";
+import { Race } from "../../domain/race/Race";
 import { RaceRepository } from "../../infrastructure/repositories/races/RaceRepository";
 import { Action } from "../Action";
 import crypto from "node:crypto";
 
 
-export class CreateRaceAction implements Action<LobbyUser, Race> {
+export class CreateRaceAction implements Action<void, Race> {
 
   constructor(private readonly raceRepository: RaceRepository) {
   }
@@ -16,7 +14,9 @@ export class CreateRaceAction implements Action<LobbyUser, Race> {
     const race: Race = {
       id: randomIdString,
       createdAt: new Date(),
-      lobbyUsers: []
+      maxPlayers: 8,
+      players: [],
+      status: "lobby",
     };
     await this.raceRepository.create(race);
     return race;

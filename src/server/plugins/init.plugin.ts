@@ -1,4 +1,6 @@
 import { defineNitroPlugin } from "../../../node_modules/.pnpm/nitropack@2.9.7/node_modules/nitropack/dist/runtime"
+import { CreatePartModelAction } from "../core/actions/car/CreatePartModelAction";
+import { GetPartModelsAction } from "../core/actions/car/GetPartModelsAction";
 import { CreateRaceAction } from "../core/actions/race/CreateRaceAction";
 import { GetRaceAction } from "../core/actions/race/GetRaceAction";
 import { GetRaceByUserAction } from "../core/actions/race/GetRaceByUserAction";
@@ -11,8 +13,10 @@ import { LoginAction } from "../core/actions/users/LoginAction";
 import { RegisterUserAction } from "../core/actions/users/RegisterUserAction";
 import { InMemoryMiniRacesCache } from "../core/infrastructure/db/InMemoryMiniRacesCache";
 import { MiniRacesDB } from "../core/infrastructure/db/MiniRacesDB";
+import { PgCarRepository } from "../core/infrastructure/repositories/car/PgCarRepository";
 import { InMemoryRaceRepository } from "../core/infrastructure/repositories/races/InMemoryRaceRepository";
 import { PgUserRepository } from "../core/infrastructure/repositories/user/PgUserRepository";
+import { Actions } from "../hooks/useActions";
 import { DisconnectHandler } from "../sockets/handlers/DisconnectHandler";
 import { JoinRaceHandler } from "../sockets/handlers/JoinRaceHandler";
 import { RaceStatusHandler } from "../sockets/handlers/RaceStatusHandler";
@@ -26,10 +30,11 @@ export default defineNitroPlugin(async (nitroApp: any) => {
 
   // creo los servicios
   const userRepository = new PgUserRepository(db);
+  const carRepository = new PgCarRepository(db);
   const inMemoryRaceRepository = new InMemoryRaceRepository(cache);
 
   // creo las acciones
-  const actions = {
+  const actions: Actions = {
     registerUserAction: new RegisterUserAction(userRepository),
     getUsersAction: new GetUsersAction(userRepository),
     getUserAction: new GetUserAction(userRepository),
@@ -39,7 +44,9 @@ export default defineNitroPlugin(async (nitroApp: any) => {
     getRaceAction: new GetRaceAction(inMemoryRaceRepository),
     joinRaceAction: new JoinRaceAction(inMemoryRaceRepository, userRepository),
     leaveRaceAction: new LeaveRaceAction(inMemoryRaceRepository),
-    getRaceByUser: new GetRaceByUserAction(inMemoryRaceRepository)
+    getRaceByUser: new GetRaceByUserAction(inMemoryRaceRepository),
+    getPartModelsAction: new GetPartModelsAction(carRepository),
+    createPartModelAction: new CreatePartModelAction(carRepository)
   };
 
   // inyecto las acciones en el server

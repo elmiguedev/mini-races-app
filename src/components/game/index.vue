@@ -4,10 +4,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted } from 'vue';
 import Phaser, { Game } from 'phaser';
-import { MainScene } from '../core/game/scenes/MainScene';
-import { PodiumScene } from '../core/game/scenes/PodiumScene';
-import { RaceScene } from '../core/game/scenes/RaceScene';
-
+import {RaceScene} from "./core/scenes/RaceScene";
 const emit = defineEmits(["mounted"]);
 const { socket } = defineProps(["socket"]);
 
@@ -23,13 +20,6 @@ onMounted(() => {
       pixelArt: true,
       transparent: true
     },
-    // scene: [
-    //   {
-    //     key: "RaceScene", classType: RaceScene, socket: socket
-    //   }
-    //   // MainScene,
-    //   // PodiumScene
-    // ],
     physics: {
       default: 'arcade',
       arcade: {

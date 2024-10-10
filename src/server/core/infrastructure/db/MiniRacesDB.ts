@@ -1,5 +1,6 @@
 import { DataSource } from "typeorm";
 import { UserDao } from "./daos/UserDao";
+import { CarPartModelDao } from "./daos/CarPartModelDao";
 
 export class MiniRacesDB {
   private dataSource: DataSource;
@@ -13,7 +14,8 @@ export class MiniRacesDB {
       password: process.env.PG_PASSWORD,
       database: process.env.PG_DATABASE,
       entities: [
-        UserDao
+        UserDao,
+        CarPartModelDao
       ],
       synchronize: Boolean(process.env.PG_SYNC) || false,
     })

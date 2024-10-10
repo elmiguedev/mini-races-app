@@ -1,4 +1,4 @@
-import { Race } from "../../domain/Race";
+import { Race } from "../../domain/race/Race";
 import { RaceRepository } from "../../infrastructure/repositories/races/RaceRepository";
 import { Action } from "../Action";
 

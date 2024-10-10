@@ -1,5 +1,5 @@
 import { LobbyUser } from "../../domain/LobbyUser";
-import { Race } from "../../domain/Race";
+import { Race } from "../../domain/race/Race";
 import { RaceRepository } from "../../infrastructure/repositories/races/RaceRepository";
 import { UserRepository } from "../../infrastructure/repositories/user/UserRepository";
 import { Action } from "../Action";

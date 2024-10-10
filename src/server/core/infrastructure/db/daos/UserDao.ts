@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "../../../../../core/domain/user/User";
+import { User } from "../../../domain/user/User";
 
 @Entity("user")
 export class UserDao implements User {

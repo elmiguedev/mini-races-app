@@ -1,4 +1,4 @@
-import { User } from "../../../../core/domain/user/User";
+import { User } from "../../domain/user/User";
 import { UserRepository } from "../../infrastructure/repositories/user/UserRepository";
 import { Action } from "../Action";
 

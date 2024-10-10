@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   srcDir: 'src/',
-  ignore: ['/src/pages/**/components/**'],
+  // ignore: ['/src/pages/**/components/**'],
   modules: ['@nuxtjs/tailwindcss', 'nuxt-auth-utils'],
   ssr: false,
   nitro: {

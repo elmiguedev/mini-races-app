@@ -1,16 +1,14 @@
 <template>
-  <div class="flex flex-col items-center">
-    <h1 class="text-3xl mb-10">Race {{ race?.id }}</h1>
-    <div class="mb-4 flex flex-row items-end w-100">
+  <div class="font-mono flex flex-col items-center w-full px-20">
+    <h1 class="text-3xl mb-10">Race Id: {{ race?.id }}</h1>
+    <div class="mb-4 flex w-full ">
+      <Button @click="handleStart">I'm ready</Button>
     </div>
-    <div>
-      <ul>
-        <li v-for="user in race?.lobbyUsers">
-          {{ user.name }}
-        </li>
-      </ul>
+    <div class="flex flex-col gap-3 w-full">
+      <div class="flex w-100" v-for="player in race?.players">
+        <LobbyPlayer :player="player" />
+      </div>
     </div>
-    <button @click="handleStart">start</button>
     <div v-if="showGame">
       <Game :socket="socket" :race="race" />
     </div>
@@ -19,7 +17,9 @@
 
 <script setup lang="ts">
 import { io } from 'socket.io-client';
-import type { Race } from '../../../server/core/domain/Race';
+import Button from '../../../components/ui/Button.vue';
+
+import type { Race } from '../../../server/core/domain/race/Race';
 const { params } = useRoute();
 const { id } = params;
 const race = ref<Race | undefined>();

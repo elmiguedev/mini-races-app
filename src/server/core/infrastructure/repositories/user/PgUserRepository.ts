@@ -1,5 +1,5 @@
 import { ObjectLiteral, Repository } from "typeorm";
-import { User } from "../../../../../core/domain/user/User";
+import { User } from "../../../domain/user/User";
 import { MiniRacesDB } from "../../db/MiniRacesDB";
 import { UserRepository } from "./UserRepository";
 import { UserDao } from "../../db/daos/UserDao";

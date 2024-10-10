@@ -1,4 +1,4 @@
-import { Race } from "../../../domain/Race";
+import { Race } from "../../../domain/race/Race";
 import { InMemoryMiniRacesCache } from "../../db/InMemoryMiniRacesCache";
 import { RaceRepository } from "./RaceRepository";
 

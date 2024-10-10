@@ -1,4 +1,4 @@
-import { Race } from "../../../domain/Race";
+import { Race } from "../../../domain/race/Race";
 
 export interface RaceRepository {
   create(race: Race): Promise<Race>;
