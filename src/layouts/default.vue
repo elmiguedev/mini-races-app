@@ -1,11 +1,15 @@
 <template>
-  <Header v-if="loggedIn"></Header>
-  <UserHeader  v-if="loggedIn"/>
-  <div class="pt-10">
-    <slot />
+  <div class="px-40">
+    <Header v-if="loggedIn"></Header>
+    <UserHeader  v-if="loggedIn"/>
+    <div class="pt-10">
+      <slot />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useUserSession } from '#imports';
+
 const {loggedIn} = useUserSession();
 </script>

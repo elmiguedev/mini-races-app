@@ -1,5 +1,5 @@
 <template>
-  <nav class="font-mono flex justify-center items-center space-x-8 p-4">
+  <nav class="flex justify-center items-center space-x-8 p-4">
     <RouterLink 
       to="/" 
       class="text-black px-4 py-2 transition-all  hover:text-gray-700"

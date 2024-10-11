@@ -1,5 +1,5 @@
 <template>
-  <div class="px-20 font-mono text-lg">
+  <div class="">
     <div class=" flex p-3 flex-row w-full items-center justify-center border-dashed border-black border-2 rounded-md">
       <!-- user name -->
       <div class="flex items-center space-x-4 mr-auto">
@@ -17,6 +17,8 @@
   </div>
 </template>
 <script setup lang="ts">
+import { useUserSession } from '#imports';
+
   const { user} = useUserSession();
 
 </script>

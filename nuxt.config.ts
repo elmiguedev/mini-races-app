@@ -5,6 +5,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   srcDir: 'src/',
+  imports: {
+    autoImport: false,
+  },
   // ignore: ['/src/pages/**/components/**'],
   modules: ['@nuxtjs/tailwindcss', 'nuxt-auth-utils'],
   ssr: false,
@@ -24,5 +27,12 @@ export default defineNuxtConfig({
   },
   tailwindcss: {
     viewer: false,
+    config: {
+      theme: {
+        fontFamily: {
+          mono: ['Consolas', 'monospace'],
+        }
+      }
+    }
   },
 })
