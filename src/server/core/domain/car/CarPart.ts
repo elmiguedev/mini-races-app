@@ -1,7 +1,7 @@
 import { CarPartModel } from "./CarPartModel";
 
 export interface CarPart {
-  id: string;
+  id: number;
   userId: string;
   model: CarPartModel;
   accelerationUpgrade: number;

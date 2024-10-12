@@ -24,10 +24,12 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import TextField from "../../components/ui/TextField.vue";
 import Button from "../../components/ui/Button.vue";
+import { useRouter } from 'vue-router';
+import { useUserSession } from '#imports';
 
 const username = ref('')
 const password = ref('')
@@ -55,7 +57,6 @@ const submitForm = async () => {
     loading.value = false;
   } catch (error) {
     console.log({ error });
-    alert(error.statusMessage || error);
     loading.value = false;
   }
 }

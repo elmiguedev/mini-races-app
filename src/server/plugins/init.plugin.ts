@@ -1,4 +1,4 @@
-import { defineNitroPlugin } from "../../../node_modules/.pnpm/nitropack@2.9.7/node_modules/nitropack/dist/runtime"
+import { defineNitroPlugin } from "#imports";
 import { CreatePartModelAction } from "../core/actions/car/CreatePartModelAction";
 import { GetPartModelsAction } from "../core/actions/car/GetPartModelsAction";
 import { CreateRaceAction } from "../core/actions/race/CreateRaceAction";
@@ -12,10 +12,9 @@ import { GetUsersAction } from "../core/actions/users/GetUsersAction";
 import { LoginAction } from "../core/actions/users/LoginAction";
 import { RegisterUserAction } from "../core/actions/users/RegisterUserAction";
 import { InMemoryMiniRacesCache } from "../core/infrastructure/db/InMemoryMiniRacesCache";
-import { MiniRacesDB } from "../core/infrastructure/db/MiniRacesDB";
-import { PgCarRepository } from "../core/infrastructure/repositories/car/PgCarRepository";
+import { PrismaCarRepository } from "../core/infrastructure/repositories/car/PrismaCarRepository";
 import { InMemoryRaceRepository } from "../core/infrastructure/repositories/races/InMemoryRaceRepository";
-import { PgUserRepository } from "../core/infrastructure/repositories/user/PgUserRepository";
+import { PrimsaUserRepository } from "../core/infrastructure/repositories/user/PrismaUserRepository";
 import { Actions } from "../hooks/useActions";
 import { DisconnectHandler } from "../sockets/handlers/DisconnectHandler";
 import { JoinRaceHandler } from "../sockets/handlers/JoinRaceHandler";
@@ -24,13 +23,12 @@ import { SocketServer } from "../sockets/SocketServer";
 
 export default defineNitroPlugin(async (nitroApp: any) => {
   // creo los servicios
-  const db = new MiniRacesDB();
   const cache = new InMemoryMiniRacesCache();
   const socketServer = new SocketServer(nitroApp);
 
   // creo los servicios
-  const userRepository = new PgUserRepository(db);
-  const carRepository = new PgCarRepository(db);
+  const userRepository = new PrimsaUserRepository();
+  const carRepository = new PrismaCarRepository();
   const inMemoryRaceRepository = new InMemoryRaceRepository(cache);
 
   // creo las acciones
@@ -58,7 +56,6 @@ export default defineNitroPlugin(async (nitroApp: any) => {
   socketServer.addSocketHandler("race_status", new RaceStatusHandler(socketServer, actions.getRaceByUser));
 
   // inicializo los servicios
-  await db.init();
   socketServer.init();
 
   // log info

@@ -1,6 +1,6 @@
 import { defineEventHandler, readBody, createError } from "h3"
-import { setUserSession } from "../../../../node_modules/.pnpm/nuxt-auth-utils@0.3.9_rollup@4.21.3/node_modules/nuxt-auth-utils/dist/runtime/server/utils/session";
 import { useActions } from "../../hooks/useActions";
+import { setUserSession } from "#imports";
 
 export default defineEventHandler(async (event) => {
 

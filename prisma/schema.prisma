@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model car_part_model {
+  id           Int    @id(map: "PK_45b11b7865e8cbdb3d255a92529") @default(autoincrement())
+  name         String @db.VarChar
+  type         String @db.VarChar
+  acceleration Int
+  velocity     Int
+  steering     Int
+  resistance   Int
+}
+
+model user {
+  id       Int    @id(map: "PK_cace4a159ff9f2512dd42373760") @default(autoincrement())
+  name     String @db.VarChar
+  email    String @db.VarChar
+  password String @db.VarChar
+}

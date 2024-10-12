@@ -2,6 +2,7 @@
 import { Server as Engine } from "engine.io";
 import { Server, Socket } from "socket.io";
 import { createEvent } from 'h3'
+import { defineEventHandler, getUserSession } from "#imports";
 
 export class SocketServer {
   private serverSocket: Server;
@@ -175,6 +176,7 @@ export class SocketServer {
       },
       websocket: {
         open(peer) {
+          // @ts-ignore
           const nodeContext = peer.ctx.node;
           const req = nodeContext.req;
 

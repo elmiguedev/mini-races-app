@@ -20,6 +20,8 @@ import { io } from 'socket.io-client';
 import Button from '../../../components/ui/Button.vue';
 
 import type { Race } from '../../../server/core/domain/race/Race';
+import { useRoute } from 'vue-router';
+import { onMounted, ref } from 'vue';
 const { params } = useRoute();
 const { id } = params;
 const race = ref<Race | undefined>();

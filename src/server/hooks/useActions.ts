@@ -10,6 +10,7 @@ import { GetUserAction } from "../core/actions/users/GetUserAction";
 import { GetUsersAction } from "../core/actions/users/GetUsersAction";
 import { LoginAction } from "../core/actions/users/LoginAction";
 import { RegisterUserAction } from "../core/actions/users/RegisterUserAction";
+import { useNitroApp } from "#imports"
 
 export interface Actions {
   registerUserAction: RegisterUserAction;
@@ -27,7 +28,6 @@ export interface Actions {
 }
 
 export function useActions(): Actions {
-  // @ts-ignore
   const nitroApp = useNitroApp()
   // @ts-ignore
   return nitroApp.actions;

@@ -1,5 +1,5 @@
 <template>
-  <div class="px-40">
+  <div class="px-40 font-mono">
     <Header v-if="loggedIn"></Header>
     <UserHeader  v-if="loggedIn"/>
     <div class="pt-10">
