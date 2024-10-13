@@ -1,20 +1,52 @@
 <template>
   <table class="w-full rounded-md">
     <thead>
-      <tr>
-
+      <tr >
+        <th>Id</th>
+        <th>Created At</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Acceleration</th>
+        <th>Velocity</th>
+        <th>Steering</th>
+        <th>Resistance</th>
       </tr>
     </thead>
     <tbody>
-
+      <tr v-for="model in models" >
+        <td>{{ model.id }}</td>
+        <td>{{ formatDate(model.createdAt) }}</td>
+        <td>{{ model.name }}</td>
+        <td>{{ model.type }}</td>
+        <td>{{ model.acceleration }}</td>
+        <td>{{ model.velocity }}</td>
+        <td>{{ model.steering }}</td>
+        <td>{{ model.resistance }}</td>
+      </tr>
     </tbody>
   </table>
 </template>
 <script setup lang="ts">
-import type { CarPartModel } from '../../server/core/domain/car/CarPartModel';
+import { CarPartModel } from '../../server/core/domain/car/CarPartModel';
 
 defineProps({
-  models: Object as () => CarPartModel[]
+  models: {
+    type: Array<CarPartModel>,
+    required: true
+  }
 })
 
+const formatDate = (date: Date) => {
+  return new Date(date).toLocaleString();
+}
+
 </script>
+
+<style>
+th, td {
+  border: 1px solid #000;
+  text-align: left;
+  padding-left: 4px;
+}
+
+</style>

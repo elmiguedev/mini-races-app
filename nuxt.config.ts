@@ -6,6 +6,12 @@ export default defineNuxtConfig({
   imports: {
     autoImport: false,
   },
+  components: [
+    "~/components/ui/",
+    "~/components/cars/",
+    "~/components/icons/",
+    "~/components/"
+  ],
   // ignore: ['/src/pages/**/components/**'],
   modules: ['@nuxtjs/tailwindcss', 'nuxt-auth-utils', '@prisma/nuxt'],
   ssr: false,
@@ -22,6 +28,6 @@ export default defineNuxtConfig({
   },
   prisma: {
     runMigration: false,
-    installStudio: false,
+    installStudio: false
   }
 })

@@ -8,7 +8,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "prisma:pull": "prisma db pull"
+    "prisma:pull": "prisma db pull",
+    "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@nuxtjs/tailwindcss": "^6.12.1",

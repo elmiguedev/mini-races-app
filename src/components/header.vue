@@ -21,5 +21,12 @@
     >
       Logout
     </RouterLink>
+    <RouterLink 
+      to="/admin" 
+      class="text-black px-4 py-2 transition-all  hover:text-gray-700"
+      :class="{ 'font-bold text-gray-800': $route.path === '/admin' }"
+    >
+      admin
+    </RouterLink>
   </nav>
 </template>

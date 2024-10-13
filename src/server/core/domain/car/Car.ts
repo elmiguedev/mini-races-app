@@ -1,8 +1,11 @@
+import { User } from "../user/User";
 import { CarSlot } from "./CarSlot";
 
 export interface Car {
-  id: number;
+  id?: number;
+  createdAt: Date;
   userId: string;
-  slots: CarSlot[];
+  CarSlot?: CarSlot[];
+  User?: User;
   color: string;
 }
