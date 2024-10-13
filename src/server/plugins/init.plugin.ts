@@ -1,4 +1,5 @@
 import { defineNitroPlugin } from "#imports";
+import { BuyPartModelAction } from "../core/actions/car/BuyPartModelAction";
 import { CreatePartModelAction } from "../core/actions/car/CreatePartModelAction";
 import { GetPartModelsAction } from "../core/actions/car/GetPartModelsAction";
 import { CreateRaceAction } from "../core/actions/race/CreateRaceAction";
@@ -44,7 +45,8 @@ export default defineNitroPlugin(async (nitroApp: any) => {
     leaveRaceAction: new LeaveRaceAction(inMemoryRaceRepository),
     getRaceByUser: new GetRaceByUserAction(inMemoryRaceRepository),
     getPartModelsAction: new GetPartModelsAction(carRepository),
-    createPartModelAction: new CreatePartModelAction(carRepository)
+    createPartModelAction: new CreatePartModelAction(carRepository),
+    buyPartModelAction: new BuyPartModelAction(carRepository, userRepository)
   };
 
   // inyecto las acciones en el server

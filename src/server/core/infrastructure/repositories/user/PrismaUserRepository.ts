@@ -20,8 +20,8 @@ export class PrimsaUserRepository implements UserRepository {
     }
     return user as User;
   }
-  public async findById(id: string): Promise<User | undefined> {
-    const user = await prisma.user.findFirst({ where: { id: Number(id) } });
+  public async findById(id: number): Promise<User | undefined> {
+    const user = await prisma.user.findFirst({ where: { id } });
     if (user === null) {
       return undefined;
     }
@@ -31,6 +31,16 @@ export class PrimsaUserRepository implements UserRepository {
   public async getAll(): Promise<User[]> {
     const users = await prisma.user.findMany();
     return users as User[];
+  }
+
+  public async updateUser(user: User): Promise<User> {
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: user.id
+      },
+      data: user
+    });
+    return updatedUser as User;
   }
 
 }

@@ -1,7 +1,7 @@
 <template>
   <table class="w-full rounded-md">
     <thead>
-      <tr >
+      <tr>
         <th>Id</th>
         <th>Created At</th>
         <th>Name</th>
@@ -10,10 +10,11 @@
         <th>Velocity</th>
         <th>Steering</th>
         <th>Resistance</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="model in models" >
+      <tr v-for="model in models">
         <td>{{ model.id }}</td>
         <td>{{ formatDate(model.createdAt) }}</td>
         <td>{{ model.name }}</td>
@@ -22,6 +23,9 @@
         <td>{{ model.velocity }}</td>
         <td>{{ model.steering }}</td>
         <td>{{ model.resistance }}</td>
+        <td>
+          <Button @click="handleBuyClick(model)">Buy</Button>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -36,17 +40,23 @@ defineProps({
   }
 })
 
+const emit = defineEmits(['buy']);
+
 const formatDate = (date: Date) => {
   return new Date(date).toLocaleString();
+}
+
+const handleBuyClick = (model: CarPartModel) => {
+  emit('buy', model);
 }
 
 </script>
 
 <style>
-th, td {
+th,
+td {
   border: 1px solid #000;
   text-align: left;
   padding-left: 4px;
 }
-
 </style>

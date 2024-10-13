@@ -11,6 +11,7 @@ import { GetUsersAction } from "../core/actions/users/GetUsersAction";
 import { LoginAction } from "../core/actions/users/LoginAction";
 import { RegisterUserAction } from "../core/actions/users/RegisterUserAction";
 import { useNitroApp } from "#imports"
+import { BuyPartModelAction } from "../core/actions/car/BuyPartModelAction";
 
 export interface Actions {
   registerUserAction: RegisterUserAction;
@@ -24,7 +25,8 @@ export interface Actions {
   leaveRaceAction: LeaveRaceAction;
   getRaceByUser: GetRaceByUserAction;
   getPartModelsAction: GetPartModelsAction,
-  createPartModelAction: CreatePartModelAction
+  createPartModelAction: CreatePartModelAction,
+  buyPartModelAction: BuyPartModelAction
 }
 
 export function useActions(): Actions {

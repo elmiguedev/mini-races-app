@@ -9,4 +9,5 @@ export interface CarPartModel {
   velocity: number;
   steering: number;
   resistance: number;
+  price: number;
 }
