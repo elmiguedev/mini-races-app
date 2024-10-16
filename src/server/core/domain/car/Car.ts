@@ -4,7 +4,7 @@ import { CarSlot } from "./CarSlot";
 export interface Car {
   id?: number;
   createdAt: Date;
-  userId: string;
+  userId: number;
   CarSlot?: CarSlot[];
   User?: User;
   color: string;

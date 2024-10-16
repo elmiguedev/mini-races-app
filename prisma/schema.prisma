@@ -10,9 +10,9 @@ datasource db {
 model Car {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @db.Timestamp(6)
-  userId    Int?
-  color     String?   @db.VarChar(255)
-  User      User?     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Car_relation_1")
+  userId    Int
+  color     String    @default(dbgenerated("0")) @db.VarChar(255)
+  User      User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Car_relation_1")
   CarSlot   CarSlot[]
 }
 
@@ -39,6 +39,7 @@ model CarPartModel {
   steering     Int
   resistance   Int
   price        Int?      @default(0)
+  createdAt    DateTime? @default(now()) @db.Timestamp(6)
   CarPart      CarPart[]
 }
 
