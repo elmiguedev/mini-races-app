@@ -1,7 +1,8 @@
+import { User } from "../user/User";
 import { CarPartModel } from "./CarPartModel";
 
 export interface CarPart {
-  id?: number | undefined;
+  id?: number;
   createdAt?: Date;
   userId: number;
   carPartModelId: number;
@@ -10,5 +11,6 @@ export interface CarPart {
   steeringUpgrade: number;
   resistanceUpgrade: number;
   CarPartModel?: CarPartModel;
+  User?: User;
 }
 

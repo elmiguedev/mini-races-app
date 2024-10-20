@@ -2,7 +2,6 @@ import { CarPartType } from "./CarPartType";
 
 export interface CarPartModel {
   id?: number;
-  createdAt: Date;
   name: string;
   type: CarPartType;
   acceleration: number;
@@ -10,4 +9,5 @@ export interface CarPartModel {
   steering: number;
   resistance: number;
   price: number;
+  createdAt: Date;
 }

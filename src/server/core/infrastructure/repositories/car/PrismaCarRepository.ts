@@ -1,33 +1,57 @@
+import prisma from "~~/lib/prisma";
 import { CarRepository } from "./CarRepository";
 import { CarPartModel } from "../../../domain/car/CarPartModel";
-import prisma from "~~/lib/prisma";
-import { CarPart } from "../../../domain/car/CarPart";
-import { Car } from "~/server/core/domain/car/Car";
 import { CarSlot } from "~/server/core/domain/car/CarSlot";
+import { CarPart } from "~/server/core/domain/car/CarPart";
+import { Car } from "~/server/core/domain/car/Car";
+
 
 export class PrismaCarRepository implements CarRepository {
   public async createCarSlot(slot: CarSlot): Promise<CarSlot> {
-    // const newSlot = await prisma.carSlot.create({
-    //   data: slot
-    // })
+    const newSlot = await prisma.carSlot.create({
+      data: {
+        carId: slot.carId,
+        type: slot.type,
+        carPartId: slot.carPartId,
+      }
+    });
+    return newSlot as CarSlot;
   }
+
   public async getCarSlotsByCarId(carId: number): Promise<CarSlot[]> {
-
+    const slots = await prisma.carSlot.findMany({
+      where: {
+        carId
+      }
+    });
+    return slots as CarSlot[];
   }
+
   public async updateCarSlot(slot: CarSlot): Promise<CarSlot> {
-
+    const updatedSlot = await prisma.carSlot.update({
+      where: {
+        id: slot.id
+      },
+      data: {
+        carId: slot.carId,
+        type: slot.type,
+        carPartId: slot.carPartId
+      }
+    });
+    return updatedSlot as CarSlot;
   }
 
 
-  public getCarPartsByUserId(userId: number): Promise<CarPart[]> {
-    return prisma.carPart.findMany({
+  public async getCarPartsByUserId(userId: number): Promise<CarPart[]> {
+    const parts = await prisma.carPart.findMany({
       where: {
         userId
       },
       include: {
-        CarPartModel: true
+        CarPartModel: true,
       }
-    })
+    });
+    return parts as CarPart[];
   }
 
   public async createPart(part: CarPart): Promise<CarPart> {
