@@ -3,7 +3,7 @@ import { CarSlot } from "./CarSlot";
 
 export interface Car {
   id?: number;
-  createdAt: Date;
+  createdAt?: Date;
   userId: number;
   color: string;
   CarSlot?: CarSlot[];

@@ -4,7 +4,7 @@ import { CarPartType } from "./CarPartType";
 
 export interface CarSlot {
   id?: number;
-  createdAt: Date;
+  createdAt?: Date;
   carId: number;
   carPartId: number;
   type: CarPartType;

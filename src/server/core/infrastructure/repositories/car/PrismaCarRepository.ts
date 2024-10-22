@@ -96,15 +96,58 @@ export class PrismaCarRepository implements CarRepository {
     const car = await prisma.car.findFirst({
       where: {
         id: carId
+      },
+      include: {
+        CarSlot: true
       }
     });
     if (car === null) {
       return undefined
     }
 
-    return car;
+    return car as Car;
   }
 
+  public async getCarByUserId(userId: number): Promise<Car[]> {
+    const cars = await prisma.car.findMany({
+      where: {
+        userId
+      },
+      include: {
+        CarSlot: {
+          include: {
+            CarPart: {
+              include: {
+                CarPartModel: true
+              }
+            }
+          }
+        }
+      }
+    });
 
+    return cars as Car[];
+  }
 
+  public async getCarPartById(carPartId: number): Promise<CarPart | undefined> {
+    const part = await prisma.carPart.findFirst({
+      where: {
+        id: carPartId
+      },
+      include: {
+        CarPartModel: true
+      }
+    });
+    return part as CarPart;
+  }
+
+  public async createCar(car: Car): Promise<Car> {
+    const newCar = await prisma.car.create({
+      data: {
+        color: car.color,
+        userId: car.userId
+      }
+    });
+    return newCar as Car;
+  }
 }

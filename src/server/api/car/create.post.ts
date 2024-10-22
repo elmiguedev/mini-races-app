@@ -3,18 +3,15 @@ import { useActions } from "../../hooks/useActions";
 import { getUserSession } from "#imports";
 
 export default defineEventHandler(async (event) => {
+  // Validar que el auto sea tuyo
   try {
+    const { createCarAction } = useActions();
     const { user } = await getUserSession(event);
-    if (!user) {
-      return createError({
-        statusCode: 401,
-        statusMessage: "Unauthorized",
-      });
-    }
-    console.log(">> el user session", user)
-    const { createRaceAction } = useActions();
-    const race = await createRaceAction.execute();
-    return race;
+    const car = await createCarAction.execute({
+      // @ts-ignore
+      userId: user.id
+    });
+    return car;
   } catch (error) {
     console.error("Error handling signup request:", error);
     return createError({
