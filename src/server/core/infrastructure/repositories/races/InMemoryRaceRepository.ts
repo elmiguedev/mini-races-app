@@ -7,9 +7,9 @@ export class InMemoryRaceRepository implements RaceRepository {
   constructor(private readonly cache: InMemoryMiniRacesCache) {
   }
 
-  public getByUserId(userId: string): Promise<Race | undefined> {
+  public getByUserId(userId: number): Promise<Race | undefined> {
     const races = Object.values(this.cache.races);
-    return Promise.resolve(races.find(race => race.lobbyUsers.find(lobbyUser => lobbyUser.id === userId)));
+    return Promise.resolve(races.find(race => race.players.find(player => player.user.id === userId)));
   }
 
   public create(race: Race): Promise<Race> {

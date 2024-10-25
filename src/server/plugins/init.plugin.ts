@@ -12,6 +12,7 @@ import { GetRaceByUserAction } from "../core/actions/race/GetRaceByUserAction";
 import { GetRacesAction } from "../core/actions/race/GetRacesAction";
 import { JoinRaceAction } from "../core/actions/race/JoinRaceAction";
 import { LeaveRaceAction } from "../core/actions/race/LeaveRaceAction";
+import { SendChatMessageAction } from "../core/actions/race/SendChatMessageAction";
 import { GetUserAction } from "../core/actions/users/GetUserAction";
 import { GetUsersAction } from "../core/actions/users/GetUsersAction";
 import { LoginAction } from "../core/actions/users/LoginAction";
@@ -21,6 +22,7 @@ import { PrismaCarRepository } from "../core/infrastructure/repositories/car/Pri
 import { InMemoryRaceRepository } from "../core/infrastructure/repositories/races/InMemoryRaceRepository";
 import { PrimsaUserRepository } from "../core/infrastructure/repositories/user/PrismaUserRepository";
 import { Actions } from "../hooks/useActions";
+import { ChatMessageHandler } from "../sockets/handlers/ChatMessageHandler";
 import { DisconnectHandler } from "../sockets/handlers/DisconnectHandler";
 import { JoinRaceHandler } from "../sockets/handlers/JoinRaceHandler";
 import { RaceStatusHandler } from "../sockets/handlers/RaceStatusHandler";
@@ -54,7 +56,8 @@ export default defineNitroPlugin(async (nitroApp: any) => {
     getUserCarPartsAction: new GetUserCarPartsAction(carRepository),
     setCarPartAction: new SetCarPartAction(carRepository),
     createCarAction: new CreateCarAction(carRepository),
-    getCarByUserIdAction: new GetCarByUserIdAction(carRepository)
+    getCarByUserIdAction: new GetCarByUserIdAction(carRepository),
+    sendChatMessageAction: new SendChatMessageAction(inMemoryRaceRepository),
   };
 
   // inyecto las acciones en el server
@@ -64,6 +67,7 @@ export default defineNitroPlugin(async (nitroApp: any) => {
   socketServer.addSocketHandler("race_join", new JoinRaceHandler(socketServer, actions.joinRaceAction));
   socketServer.addSocketHandler("disconnect", new DisconnectHandler(socketServer, actions.leaveRaceAction));
   socketServer.addSocketHandler("race_status", new RaceStatusHandler(socketServer, actions.getRaceByUser));
+  socketServer.addSocketHandler("room_chat", new ChatMessageHandler(socketServer, actions.sendChatMessageAction));
 
   // inicializo los servicios
   socketServer.init();

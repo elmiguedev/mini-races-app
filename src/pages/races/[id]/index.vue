@@ -10,37 +10,33 @@
       </div>
     </div>
     <div v-if="showGame">
-      <Game :socket="socket" :race="race" />
+      <!-- <Game :socket="socketManager" :race="race" /> -->
+    </div>
+    <div>
+      <ChatBox :messages="messages" @send="handleChatBoxMessage" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { io } from 'socket.io-client';
 import Button from '../../../components/ui/Button.vue';
+import Game from "../../../components/game/index.vue";
+import ChatBox from "../../../components/ChatBox.vue";
 
 import type { Race } from '../../../server/core/domain/race/Race';
 import { useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
+import { SocketManager } from '../../../services/socket/SocketManager';
 const { params } = useRoute();
 const { id } = params;
 const race = ref<Race | undefined>();
 const showGame = ref(false);
+const socketManager = new SocketManager(id as string);
+const messages = ref<string[]>([]);
 
-const socket = io();
-
-socket.on('connect', () => {
-  console.log('>> connected', socket.id);
-})
-
-socket.on('confirm_connection', () => {
-  console.log('>> confirmed', socket.id);
-  socket.emit('race_join', id);
-});
-
-socket.on("race_status", (status) => {
-  console.log(">> race status", status);
-  race.value = status;
+socketManager.on("room_chat", (data) => {
+  console.log("chat", data);
+  messages.value.push(`${data.name}: ${data.message}`);
 })
 
 
@@ -48,9 +44,16 @@ const handleStart = () => {
   showGame.value = true
 }
 
+const handleChatBoxMessage = (message: string) => {
+  socketManager.emit("room_chat", message);
+}
+
 
 const getRace = async () => {
   race.value = await $fetch(`/api/races/${id}`);
+  console.log()
+  console.log(">> race", race.value);
+  console.log()
 }
 
 onMounted(async () => {

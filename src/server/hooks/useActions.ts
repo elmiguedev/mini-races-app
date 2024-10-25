@@ -16,6 +16,7 @@ import { GetUserCarPartsAction } from "../core/actions/car/GetUserCarPartsAction
 import { SetCarPartAction } from "../core/actions/car/SetCarPartAction";
 import { CreateCarAction } from "../core/actions/car/CreateCarAction";
 import { GetCarByUserIdAction } from "../core/actions/car/GetCarByUserIdAction";
+import { SendChatMessageAction } from "../core/actions/race/SendChatMessageAction";
 
 export interface Actions {
   registerUserAction: RegisterUserAction;
@@ -35,6 +36,7 @@ export interface Actions {
   setCarPartAction: SetCarPartAction;
   createCarAction: CreateCarAction;
   getCarByUserIdAction: GetCarByUserIdAction;
+  sendChatMessageAction: SendChatMessageAction;
 }
 
 export function useActions(): Actions {

@@ -17,6 +17,7 @@ export class CreateRaceAction implements Action<void, Race> {
       maxPlayers: 8,
       players: [],
       status: "lobby",
+      chats: []
     };
     await this.raceRepository.create(race);
     return race;

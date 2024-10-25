@@ -1,9 +1,10 @@
 import { defineEventHandler } from "h3"
 import { useActions } from "../../../hooks/useActions";
+import { getRouterParam } from "#imports";
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, "id");
   const { getRaceAction } = useActions();
-  const race = await getRaceAction.execute(id);
+  const race = await getRaceAction.execute(id!);
   return race;
 })
