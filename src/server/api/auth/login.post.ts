@@ -1,55 +1,50 @@
-import { defineEventHandler, readBody, createError, setResponseStatus } from "h3"
+import { defineEventHandler, readBody, createError } from "h3"
 import { useActions } from "../../hooks/useActions";
 import { setUserSession } from "#imports";
+import { LoginRequest } from "../../../model/auth/LoginRequest";
+
 export default defineEventHandler(async (event) => {
   try {
-    const body = await readBody(event);
+
+    // 1. get body request
+    const body = await readBody<LoginRequest>(event);
+
+    // 2. validate body
     if (!body) {
-      console.error("Request body is empty or undefined");
       return createError({
         statusCode: 400,
-        statusMessage: "Request body is empty or undefined",
+        statusMessage: "email and password are required",
       });
     }
 
-    const { email, password } = body;
-
-    if (!email || !password) {
-      console.error("email or password missing");
-      return createError({
-        statusCode: 400,
-        statusMessage: "Username and password are required",
-      });
-    }
-
+    // 3. creates login action
     const { loginAction } = useActions();
     const user = await loginAction.execute({
       email: body.email,
       password: body.password
     });
 
+    // 4. validate user response
     if (!user) {
-      setResponseStatus(event, 401);
-      return {
-        message: "user not found"
-      }
-    } else {
-      const userData = {
-        email: user?.email,
-        name: user?.name,
-        id: user?.id
-      };
-
-      await setUserSession(event, {
-        user: userData,
-        loggedInAt: new Date(),
+      return createError({
+        statusCode: 401,
+        statusMessage: "email and password are invalid",
       });
-
-      return { success: true, user };
     }
 
+    // 5. creates session user
+    await setUserSession(event, {
+      user: {
+        email: user.email,
+        name: user.name,
+        id: user.id
+      },
+      loggedInAt: new Date(),
+    });
+
+    return user;
+
   } catch (error) {
-    console.error("Error handling login request:", error);
     return createError({
       statusCode: 500,
       statusMessage: "Failed to process request",
