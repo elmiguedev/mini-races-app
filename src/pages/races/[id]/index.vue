@@ -2,7 +2,7 @@
   <div class="font-mono flex flex-col items-center w-full px-20">
     <h1 class="text-3xl mb-10">Race Id: {{ race?.id }}</h1>
     <div class="mb-4 flex w-full ">
-      <Button @click="handleStart">I'm ready</Button>
+      <Button @click="handlePlayerReadyClick">I'm ready</Button>
     </div>
     <div class="flex flex-col gap-3 w-full">
       <div class="flex w-100" v-for="player in race?.players">
@@ -22,6 +22,7 @@
 import Button from '../../../components/ui/Button.vue';
 import Game from "../../../components/game/index.vue";
 import ChatBox from "../../../components/ChatBox.vue";
+import LobbyPlayer from '~/components/LobbyPlayer.vue';
 
 import type { Race } from '../../../server/core/domain/race/Race';
 import { useRoute } from 'vue-router';
@@ -39,6 +40,10 @@ socketManager.on("room_chat", (data) => {
   messages.value.push(`${data.name}: ${data.message}`);
 })
 
+socketManager.on("race_status", (data) => {
+  console.log("race_status", data);
+  race.value = data;
+});
 
 const handleStart = () => {
   showGame.value = true
@@ -46,6 +51,10 @@ const handleStart = () => {
 
 const handleChatBoxMessage = (message: string) => {
   socketManager.emit("room_chat", message);
+}
+
+const handlePlayerReadyClick = () => {
+  socketManager.emit("player_ready", {});
 }
 
 

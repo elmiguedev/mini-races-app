@@ -1,7 +1,7 @@
 import { Socket } from "socket.io-client";
 import { io } from 'socket.io-client';
 
-export type MessageType = "race_join" | "race_status" | "room_chat";
+export type MessageType = "race_join" | "race_status" | "room_chat" | "player_ready";
 
 export class SocketManager {
 
