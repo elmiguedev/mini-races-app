@@ -14,6 +14,8 @@ export class SocketManager {
     this.socket.on('connect', () => {
       console.log('>> connected', this.socket.id);
       this.socket.emit('race_join', this.room);
+
+
     });
 
   }
@@ -25,6 +27,10 @@ export class SocketManager {
   public emit(message: MessageType, data: any) {
     console.log(">> emit del socket manager", message, data);
     this.socket.emit(message, data);
+  }
+
+  public disconnect() {
+    this.socket.disconnect();
   }
 
   // const socket = io();

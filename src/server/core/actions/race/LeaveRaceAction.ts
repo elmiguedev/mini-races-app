@@ -1,11 +1,9 @@
-import { LobbyUser } from "../../domain/LobbyUser";
 import { Race } from "../../domain/race/Race";
 import { RaceRepository } from "../../infrastructure/repositories/races/RaceRepository";
-import { UserRepository } from "../../infrastructure/repositories/user/UserRepository";
 import { Action } from "../Action";
 
 export interface LeaveRaceActionParams {
-  userId: string;
+  userId: number;
 }
 
 export class LeaveRaceAction implements Action<LeaveRaceActionParams, Race> {
@@ -19,9 +17,13 @@ export class LeaveRaceAction implements Action<LeaveRaceActionParams, Race> {
       throw new Error("Race not found");
     }
 
-    race.lobbyUsers = race.lobbyUsers.filter(
-      (lobbyUser) => lobbyUser.id !== params.userId
+    race.players = race.players.filter(
+      (player) => player.user.id !== params.userId
     );
+
+    if (race.players.length === 0) {
+      await this.raceRepository.deleteRace(race);
+    }
 
     return race;
   }

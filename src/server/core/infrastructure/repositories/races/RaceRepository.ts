@@ -5,4 +5,5 @@ export interface RaceRepository {
   getAll(): Promise<Race[]>;
   getById(id: string): Promise<Race | undefined>;
   getByUserId(userId: number): Promise<Race | undefined>;
+  deleteRace(race: Race): Promise<Race>;
 }

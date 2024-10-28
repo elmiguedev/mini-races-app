@@ -26,7 +26,7 @@ import LobbyPlayer from '~/components/LobbyPlayer.vue';
 
 import type { Race } from '../../../server/core/domain/race/Race';
 import { useRoute } from 'vue-router';
-import { onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { SocketManager } from '../../../services/socket/SocketManager';
 const { params } = useRoute();
 const { id } = params;
@@ -43,6 +43,7 @@ socketManager.on("room_chat", (data) => {
 socketManager.on("race_status", (data) => {
   console.log("race_status", data);
   race.value = data;
+  checkRaceReady();
 });
 
 const handleStart = () => {
@@ -57,6 +58,12 @@ const handlePlayerReadyClick = () => {
   socketManager.emit("player_ready", {});
 }
 
+const checkRaceReady = () => {
+  if (race.value?.status === "ready") {
+    alert("RACE READY");
+  }
+}
+
 
 const getRace = async () => {
   race.value = await $fetch(`/api/races/${id}`);
@@ -67,6 +74,10 @@ const getRace = async () => {
 
 onMounted(async () => {
   await getRace();
+})
+
+onBeforeUnmount(() => {
+  socketManager.disconnect();
 })
 
 </script>

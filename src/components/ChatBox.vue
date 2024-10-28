@@ -4,7 +4,7 @@
       <span v-for="message in messages">{{ message }}</span>
     </div>
     <div>
-      <input type="text" v-model="message" placeholder="mensaje" />
+      <input type="text" @keyup.enter="handleTextFieldEnter" v-model="message" placeholder="mensaje" />
       <button @click="handleTextFieldEnter">send</button>
     </div>
   </div>

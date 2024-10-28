@@ -25,4 +25,8 @@ export class InMemoryRaceRepository implements RaceRepository {
     return Promise.resolve(this.cache.races[id]);
   }
 
+  public deleteRace(race: Race): Promise<Race> {
+    delete this.cache.races[race.id];
+    return Promise.resolve(race);
+  }
 }
