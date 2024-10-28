@@ -4,6 +4,7 @@ export const PlayerStatusTypes = {
   running: "running",
   finished: "finished",
   ready: "ready",
+  inRace: "inRace",
 } as const;
 
 export type PlayerStatus = typeof PlayerStatusTypes[keyof typeof PlayerStatusTypes];
