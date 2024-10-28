@@ -4,7 +4,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted } from 'vue';
 import Phaser, { Game } from 'phaser';
-import {RaceScene} from "./core/scenes/RaceScene";
+import { StartScene } from './core/scenes/StartScene';
 const emit = defineEmits(["mounted"]);
 const { socket } = defineProps(["socket"]);
 
@@ -26,9 +26,11 @@ onMounted(() => {
         debug: true
       }
     },
+    scene: [
+      StartScene
+    ]
   });
 
-  game.scene.add('RaceScene', RaceScene, true, { socket: socket });
   emit("mounted");
 
 });

@@ -12,6 +12,7 @@ import { GetRaceByUserAction } from "../core/actions/race/GetRaceByUserAction";
 import { GetRacesAction } from "../core/actions/race/GetRacesAction";
 import { JoinRaceAction } from "../core/actions/race/JoinRaceAction";
 import { LeaveRaceAction } from "../core/actions/race/LeaveRaceAction";
+import { PlayerInRaceAction } from "../core/actions/race/PlayerInRaceAction";
 import { PlayerReadyAction } from "../core/actions/race/PlayerReadyAction";
 import { SendChatMessageAction } from "../core/actions/race/SendChatMessageAction";
 import { GetUserAction } from "../core/actions/users/GetUserAction";
@@ -26,6 +27,7 @@ import { Actions } from "../hooks/useActions";
 import { ChatMessageHandler } from "../sockets/handlers/ChatMessageHandler";
 import { DisconnectHandler } from "../sockets/handlers/DisconnectHandler";
 import { JoinRaceHandler } from "../sockets/handlers/JoinRaceHandler";
+import { PlayerInRaceHandler } from "../sockets/handlers/PlayerInRaceHandler";
 import { PlayerReadyHandler } from "../sockets/handlers/PlayerReadyHandler";
 import { RaceStatusHandler } from "../sockets/handlers/RaceStatusHandler";
 import { SocketServer } from "../sockets/SocketServer";
@@ -60,7 +62,8 @@ export default defineNitroPlugin(async (nitroApp: any) => {
     createCarAction: new CreateCarAction(carRepository),
     getCarByUserIdAction: new GetCarByUserIdAction(carRepository),
     sendChatMessageAction: new SendChatMessageAction(inMemoryRaceRepository),
-    playerReadyAction: new PlayerReadyAction(inMemoryRaceRepository)
+    playerReadyAction: new PlayerReadyAction(inMemoryRaceRepository),
+    playerInRaceAction: new PlayerInRaceAction(inMemoryRaceRepository)
   };
 
   // inyecto las acciones en el server
@@ -72,6 +75,7 @@ export default defineNitroPlugin(async (nitroApp: any) => {
   socketServer.addSocketHandler("race_status", new RaceStatusHandler(socketServer, actions.getRaceByUser));
   socketServer.addSocketHandler("room_chat", new ChatMessageHandler(socketServer, actions.sendChatMessageAction));
   socketServer.addSocketHandler("player_ready", new PlayerReadyHandler(socketServer, actions.playerReadyAction));
+  socketServer.addSocketHandler("player_in_race", new PlayerInRaceHandler(socketServer, actions.playerInRaceAction));
 
   // inicializo los servicios
   socketServer.init();

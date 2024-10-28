@@ -1,18 +1,18 @@
 <template>
   <div class="font-mono flex flex-col items-center w-full px-20">
     <h1 class="text-3xl mb-10">Race Id: {{ race?.id }}</h1>
-    <div class="mb-4 flex w-full ">
+    <div v-if="!showGame" class="mb-4 flex w-full ">
       <Button @click="handlePlayerReadyClick">I'm ready</Button>
     </div>
-    <div class="flex flex-col gap-3 w-full">
+    <div v-if="!showGame" class="flex flex-col gap-3 w-full">
       <div class="flex w-100" v-for="player in race?.players">
         <LobbyPlayer :player="player" />
       </div>
     </div>
     <div v-if="showGame">
-      <!-- <Game :socket="socketManager" :race="race" /> -->
+      <Game :race="race" />
     </div>
-    <div>
+    <div v-if="!showGame">
       <ChatBox :messages="messages" @send="handleChatBoxMessage" />
     </div>
   </div>
@@ -32,36 +32,42 @@ const { params } = useRoute();
 const { id } = params;
 const race = ref<Race | undefined>();
 const showGame = ref(false);
-const socketManager = new SocketManager(id as string);
 const messages = ref<string[]>([]);
 
-socketManager.on("room_chat", (data) => {
-  console.log("chat", data);
-  messages.value.push(`${data.name}: ${data.message}`);
-})
 
-socketManager.on("race_status", (data) => {
-  console.log("race_status", data);
-  race.value = data;
-  checkRaceReady();
-});
 
-const handleStart = () => {
+const startGame = () => {
   showGame.value = true
 }
 
 const handleChatBoxMessage = (message: string) => {
-  socketManager.emit("room_chat", message);
+  SocketManager.getInstance().emit("room_chat", message);
 }
 
 const handlePlayerReadyClick = () => {
-  socketManager.emit("player_ready", {});
+  SocketManager.getInstance().emit("player_ready", {});
 }
 
 const checkRaceReady = () => {
   if (race.value?.status === "ready") {
-    alert("RACE READY");
+    startGame();
   }
+}
+
+const joinRoom = (id: string) => {
+  SocketManager.getInstance().join(id);
+
+  SocketManager.getInstance().on("room_chat", (data) => {
+    console.log("chat", data);
+    messages.value.push(`${data.name}: ${data.message}`);
+  })
+
+  SocketManager.getInstance().on("race_status", (data) => {
+    console.log("race_status", data);
+    race.value = data;
+    checkRaceReady();
+  });
+
 }
 
 
@@ -70,6 +76,8 @@ const getRace = async () => {
   console.log()
   console.log(">> race", race.value);
   console.log()
+  joinRoom(race.value?.id!);
+
 }
 
 onMounted(async () => {
@@ -77,7 +85,7 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
-  socketManager.disconnect();
+  SocketManager.getInstance().disconnect();
 })
 
 </script>

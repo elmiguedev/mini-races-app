@@ -6,7 +6,7 @@ import { UserRepository } from "../../infrastructure/repositories/user/UserRepos
 import { Action } from "../Action";
 
 export interface JoinRaceActionParams {
-  userId: string;
+  userId: number;
   raceId: string;
 }
 
@@ -30,7 +30,6 @@ export class JoinRaceAction implements Action<JoinRaceActionParams, Race> {
     const player = this.createPlayer(user);
 
     race.players.push(player);
-    console.log(" >> se joinea un user a la carrera", race);
     return race;
   }
 
@@ -41,7 +40,6 @@ export class JoinRaceAction implements Action<JoinRaceActionParams, Race> {
       car: {
         color: "red",
         id: user.id!,
-        slots: [],
         userId: user.id!,
       },
       status: "lobby",

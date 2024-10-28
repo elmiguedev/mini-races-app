@@ -1,36 +1,47 @@
 import { Socket } from "socket.io-client";
 import { io } from 'socket.io-client';
 
-export type MessageType = "race_join" | "race_status" | "room_chat" | "player_ready";
+export type MessageType = "race_join" | "race_status" | "room_chat" | "player_ready" | "player_in_race";
 
 export class SocketManager {
+  private static instance: SocketManager;
+  public static getInstance() {
+    if (!SocketManager.instance) {
+      SocketManager.instance = new SocketManager();
+    }
+    return SocketManager.instance;
+  }
 
-  private socket: Socket;
-  private room: string;
+  private socket: Socket | undefined;
+  private room!: string;
 
-  constructor(room: string) {
-    this.room = room;
-    this.socket = io();
-    this.socket.on('connect', () => {
-      console.log('>> connected', this.socket.id);
-      this.socket.emit('race_join', this.room);
-
-
-    });
+  private constructor() {
 
   }
 
+  public join(room: string) {
+    this.room = room;
+    this.socket = io();
+    this.socket.on('connect', () => {
+      console.log('>> connected', this.socket!.id);
+      this.socket!.emit('race_join', this.room);
+    });
+  }
+
   public on(message: MessageType, callback: (data: any) => void) {
+    if (!this.socket) return;
     this.socket.on(message, callback);
   }
 
   public emit(message: MessageType, data: any) {
-    console.log(">> emit del socket manager", message, data);
+    if (!this.socket) return;
     this.socket.emit(message, data);
   }
 
   public disconnect() {
+    if (!this.socket) return;
     this.socket.disconnect();
+    this.socket = undefined;
   }
 
   // const socket = io();
