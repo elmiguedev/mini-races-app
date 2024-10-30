@@ -70,8 +70,27 @@ export class ServerRaceEntity {
     return this.players[socketId];
   }
 
+  public getPlayerByUserId(userId: number): ServerPlayerEntity | undefined {
+    for (const player of Object.values(this.players)) {
+      if (player.getUserId() === userId) {
+        return player;
+      }
+    }
+  }
+
   public addChatMessage(message: ChatMessage) {
     this.chats.push(message);
+  }
+
+  public checkPlayersReady() {
+    const playersReady = Object.values(this.players).every((player) => player.getStatus() === "ready");
+    if (playersReady) {
+      this.status = "ready";
+    }
+  }
+
+  public getStatus(): RaceStatus {
+    return this.status;
   }
 
   private generateId(): string {

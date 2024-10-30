@@ -1,12 +1,12 @@
+import { RaceData } from "../../domain/race/RaceData";
 import { RaceRepository } from "../../infrastructure/repositories/races/RaceRepository";
-import { Race } from "../../domain/race/RaceData";
 import { Action } from "../Action";
 
 export interface PlayerReadyActionParams {
   userId: number;
 }
 
-export class PlayerReadyAction implements Action<PlayerReadyActionParams, Race> {
+export class PlayerReadyAction implements Action<PlayerReadyActionParams, RaceData> {
   constructor(
     private readonly raceRepository: RaceRepository
   ) { }
@@ -16,16 +16,15 @@ export class PlayerReadyAction implements Action<PlayerReadyActionParams, Race> 
     if (!race) {
       throw new Error("Race not found");
     }
-    const user = await race.players.find((player) => player.user.id === params.userId);
+    const user = await race.getPlayerByUserId(params.userId);
     if (!user) {
       throw new Error("User not found");
     }
-    user.status = "ready";
-    if (race.players.every((player) => player.status === "ready")) {
-      race.status = "ready";
-    }
-    return race;
 
+    user.setStatus("ready");
+    race.checkPlayersReady();
+
+    return race.getData();
   }
 
 }

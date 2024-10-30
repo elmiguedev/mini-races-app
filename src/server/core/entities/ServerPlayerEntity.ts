@@ -69,4 +69,12 @@ export class ServerPlayerEntity {
   public getSocketId(): string {
     return this.socketId;
   }
+
+  public setStatus(status: PlayerStatus) {
+    this.status = status;
+  }
+
+  public getStatus(): PlayerStatus {
+    return this.status;
+  }
 }
