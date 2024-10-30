@@ -1,3 +1,23 @@
+import { World } from "planck";
+import { Race } from "../domain/race/Race";
+import { PlayerEntity } from "./PlayerEntity";
+
+export class ServerRaceEntity {
+  public race: Race;
+  private world: World;
+  private players: Record<string, PlayerEntity> = {};
+
+  constructor(race: Race) {
+    this.race = race;
+    this.world = new World();
+    this.race.players.forEach((player) => {
+      this.players[player.socketId] = new PlayerEntity(player);
+    })
+  }
+
+
+}
+
 // const validateCheckpointOverlap = (checkpoints: Checkpoint[], car: Car, race: any, callback: any) => {
 //   for (let i = 0; i < checkpoints.length; i++) {
 //     if (
