@@ -1,14 +1,14 @@
 import { Scene } from "phaser";
-import { Player } from "~/server/core/domain/race/PlayerData";
+import { PlayerData } from "~/server/core/domain/race/PlayerData";
 
 
 export class PlayerEntity {
 
-  private player: Player;
+  private player: PlayerData;
   private scene: Scene;
   public sprite: Phaser.GameObjects.Sprite;
 
-  constructor(scene: Scene, player: Player) {
+  constructor(scene: Scene, player: PlayerData) {
     this.scene = scene;
     this.player = player;
     this.sprite = this.scene.add.sprite(

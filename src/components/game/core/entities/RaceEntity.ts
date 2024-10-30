@@ -1,17 +1,17 @@
-import { Race } from "~/server/core/domain/race/RaceData";
 import { PlayerEntity } from "./PlayerEntity";
 import { Scene } from "phaser";
 import { TrackEntity } from "./TrackEntity";
+import { RaceData } from "../../../../server/core/domain/race/RaceData";
 
 export class RaceEntity {
-  private race: Race;
+  private race: RaceData;
   private scene: Scene;
   private cars: Record<string, PlayerEntity> = {};
   private mainCar!: PlayerEntity;
   private track!: TrackEntity;
   private socketId: string;
 
-  constructor(scene: Scene, race: Race, socketId: string) {
+  constructor(scene: Scene, race: RaceData, socketId: string) {
     this.scene = scene;
     this.race = race;
     this.socketId = socketId;
@@ -28,7 +28,7 @@ export class RaceEntity {
   }
 
   private createPlayers() {
-    this.race.players.forEach((player) => {
+    Object.values(this.race.players).forEach((player) => {
       this.cars[player.socketId] = new PlayerEntity(this.scene, player);
       if (player.socketId === this.socketId) {
         this.mainCar = this.cars[player.socketId];
