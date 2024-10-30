@@ -8,6 +8,7 @@ import { Action } from "../Action";
 export interface JoinRaceActionParams {
   userId: number;
   raceId: string;
+  socketId: string;
 }
 
 export class JoinRaceAction implements Action<JoinRaceActionParams, Race> {
@@ -27,15 +28,15 @@ export class JoinRaceAction implements Action<JoinRaceActionParams, Race> {
       throw new Error("User not found");
     }
 
-    const player = this.createPlayer(user);
+    const player = this.createPlayer(user, params.socketId);
 
     race.players.push(player);
     return race;
   }
 
-  private createPlayer(user: User): Player {
+  private createPlayer(user: User, socketId: string): Player {
     return {
-      socketId: "",
+      socketId: socketId,
       user,
       car: {
         color: "red",

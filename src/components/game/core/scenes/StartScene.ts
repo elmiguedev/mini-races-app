@@ -1,11 +1,20 @@
+import { Race } from "~/server/core/domain/race/Race";
 import { SocketManager } from "../../../../services/socket/SocketManager";
+import CarPng from "../assets/sprites/car.png";
+import MapPng from "../assets/img/map.png";
 
 export class StartScene extends Phaser.Scene {
 
   private socketManager!: SocketManager;
+  private race!: Race;
 
   constructor() {
     super('start-scene');
+  }
+
+  preload() {
+    this.load.image("car", CarPng);
+    this.load.image("map", MapPng);
   }
 
   create() {
@@ -22,6 +31,7 @@ export class StartScene extends Phaser.Scene {
     SocketManager.getInstance().emit("player_in_race", {});
 
     SocketManager.getInstance().on("race_status", (data) => {
+      this.race = data;
       if (data.status === "countdown") {
         txt.destroy();
         this.createCountdown()
@@ -43,6 +53,10 @@ export class StartScene extends Phaser.Scene {
       contador--;
       if (contador <= 0) {
         clearInterval(timer);
+        this.scene.start("RaceScene", {
+          race: this.race,
+          socketId: SocketManager.getInstance().getId()
+        });
       }
       t.setText(contador.toString());
     }, 1000)

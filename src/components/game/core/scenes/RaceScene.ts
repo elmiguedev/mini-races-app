@@ -1,39 +1,28 @@
-import type { Socket } from "socket.io-client";
+import { Race } from "~/server/core/domain/race/Race";
+import { RaceEntity } from "../entities/RaceEntity";
+
+export interface RaceSceneProps {
+  race: Race;
+  socketId: string;
+}
 
 export class RaceScene extends Phaser.Scene {
 
-  private socket!: Socket;
+  private raceEntity!: RaceEntity;
 
   constructor() {
     super("RaceScene");
   }
 
-  init(data: any) {
-    this.socket = data.socket;
-    console.log("LA RACE SCENE");
+  init(data: RaceSceneProps) {
+    this.raceEntity = new RaceEntity(
+      this,
+      data.race,
+      data.socketId
+    );
   }
 
   create() {
-    console.log("CREA LA RACE SCENE")
-    this.add.text(200, 200, "RACE", {
-      fontSize: "32px",
-      color: "black"
-    })
-
-    if (this.socket) {
-
-      this.socket.on("race_status", (race: any) => {
-
-        race.lobbyUsers.forEach((lobbyUser: any) => {
-          this.add.text(200, 300, `${lobbyUser.id} - ${lobbyUser.name}`, {
-            fontSize: "32px",
-            color: "black"
-          })
-        })
-
-      })
-
-      this.socket.emit("race_status");
-    }
+    this.add.text(10, 10, "Race");
   }
 }

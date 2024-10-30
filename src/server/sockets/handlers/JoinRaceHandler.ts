@@ -15,7 +15,8 @@ export class JoinRaceHandler {
     console.log(">> se unio el socket al room id")
     const race = await this.action.execute({
       userId: user.id,
-      raceId
+      raceId,
+      socketId: socket.id
     });
 
     console.log(">> la carrera como queda", race)

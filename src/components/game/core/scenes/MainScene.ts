@@ -1,7 +1,7 @@
 import { Scene } from "phaser";
 import MapPng from "../assets/img/map.png";
 import { Track } from "../entities/Track";
-import { CarEntity } from "../entities/CarEntity";
+import { CarEntity } from "../entities/PlayerEntity";
 import type { Socket } from "socket.io-client";
 import io from "socket.io-client";
 import type { Car } from "../../domain/user/Car";

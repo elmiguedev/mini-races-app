@@ -44,6 +44,13 @@ export class SocketManager {
     this.socket = undefined;
   }
 
+  public getId() {
+    if (!this.socket) {
+      throw new Error("Socket not initialized");
+    }
+    return this.socket.id
+  }
+
   // const socket = io();
 
   // socket.on('connect', () => {
