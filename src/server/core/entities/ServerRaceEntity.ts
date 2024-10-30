@@ -89,6 +89,13 @@ export class ServerRaceEntity {
     }
   }
 
+  public checkPlayersInRace() {
+    const playersReady = Object.values(this.players).every((player) => player.getStatus() === "inRace");
+    if (playersReady) {
+      this.status = "countdown";
+    }
+  }
+
   public getStatus(): RaceStatus {
     return this.status;
   }
