@@ -1,32 +1,34 @@
-import { Race } from "../../../domain/race/Race";
-import { InMemoryMiniRacesCache } from "../../db/InMemoryMiniRacesCache";
+import { ServerRaceEntity } from "../../../entities/ServerRaceEntity";
 import { RaceRepository } from "./RaceRepository";
 
 export class InMemoryRaceRepository implements RaceRepository {
 
-  constructor(private readonly cache: InMemoryMiniRacesCache) {
-  }
+  private races: Record<string, ServerRaceEntity> = {};
 
-  public getByUserId(userId: number): Promise<Race | undefined> {
-    const races = Object.values(this.cache.races);
-    return Promise.resolve(races.find(race => race.players.find(player => player.user.id === userId)));
-  }
-
-  public create(race: Race): Promise<Race> {
-    this.cache.races[race.id] = race;
+  public create(): Promise<ServerRaceEntity> {
+    const race = new ServerRaceEntity();
+    this.races[race.getId()] = race;
     return Promise.resolve(race);
   }
 
-  public getAll(): Promise<Race[]> {
-    return Promise.resolve(Object.values(this.cache.races));
+  public getById(id: string): Promise<ServerRaceEntity | undefined> {
+    return Promise.resolve(this.races[id]);
   }
 
-  public getById(id: string): Promise<Race | undefined> {
-    return Promise.resolve(this.cache.races[id]);
+  public getByUserId(userId: number): Promise<ServerRaceEntity | undefined> {
+    const races = Object.values(this.races);
+    return Promise.resolve(races.find(race => race.hasUserId(userId)));
   }
 
-  public deleteRace(race: Race): Promise<Race> {
-    delete this.cache.races[race.id];
+  public getAll(): Promise<ServerRaceEntity[]> {
+    return Promise.resolve(Object.values(this.races));
+  }
+
+  public deleteRace(id: string): Promise<ServerRaceEntity> {
+    const race = this.races[id];
+    delete this.races[id];
     return Promise.resolve(race);
   }
+
+
 }

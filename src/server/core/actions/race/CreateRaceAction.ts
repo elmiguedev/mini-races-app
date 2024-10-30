@@ -1,29 +1,17 @@
-import { Race } from "../../domain/race/Race";
+import { ServerRaceEntity } from "../../entities/ServerRaceEntity";
 import { RaceRepository } from "../../infrastructure/repositories/races/RaceRepository";
 import { Action } from "../Action";
-import crypto from "node:crypto";
 
 
-export class CreateRaceAction implements Action<void, Race> {
+export class CreateRaceAction implements Action<void, ServerRaceEntity> {
 
   constructor(private readonly raceRepository: RaceRepository) {
   }
 
-  public async execute(): Promise<Race> {
-    const randomIdString = this.generateId()
-    const race: Race = {
-      id: randomIdString,
-      createdAt: new Date(),
-      maxPlayers: 8,
-      players: [],
-      status: "lobby",
-      chats: []
-    };
-    await this.raceRepository.create(race);
+  public async execute(): Promise<ServerRaceEntity> {
+    const race = await this.raceRepository.create();
     return race;
   }
 
-  private generateId(): string {
-    return crypto.randomUUID();
-  }
+
 }

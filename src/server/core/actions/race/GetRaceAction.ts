@@ -1,11 +1,12 @@
-import { Race } from "../../domain/race/Race";
+import { RaceData } from "../../domain/race/RaceData";
 import { RaceRepository } from "../../infrastructure/repositories/races/RaceRepository";
 import { Action } from "../Action";
 
-export class GetRaceAction implements Action<string, Race | undefined> {
+export class GetRaceAction implements Action<string, RaceData | undefined> {
   constructor(private readonly raceRepository: RaceRepository) { }
 
-  public execute(id: string) {
-    return this.raceRepository.getById(id);
+  public async execute(id: string) {
+    const race = await this.raceRepository.getById(id);
+    return race?.getData();
   }
 }

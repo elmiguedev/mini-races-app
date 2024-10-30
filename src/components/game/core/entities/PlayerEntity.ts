@@ -1,5 +1,5 @@
 import { Scene } from "phaser";
-import { Player } from "~/server/core/domain/race/Player";
+import { Player } from "~/server/core/domain/race/PlayerData";
 
 
 export class PlayerEntity {

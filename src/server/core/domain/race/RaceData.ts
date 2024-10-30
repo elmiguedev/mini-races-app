@@ -1,11 +1,11 @@
 import { ChatMessage } from "./ChatMessage";
-import { Player } from "./Player";
+import { PlayerData } from "./PlayerData";
 import { RaceStatus } from "./RaceStatus";
 
-export interface Race {
+export interface RaceData {
   id: string;
   maxPlayers: number;
-  players: Player[];
+  players: Record<string, PlayerData>;
   createdAt: Date;
   status: RaceStatus;
   chats: ChatMessage[];

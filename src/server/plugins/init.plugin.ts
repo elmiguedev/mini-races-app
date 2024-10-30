@@ -34,13 +34,12 @@ import { SocketServer } from "../sockets/SocketServer";
 
 export default defineNitroPlugin(async (nitroApp: any) => {
   // creo los servicios
-  const cache = new InMemoryMiniRacesCache();
   const socketServer = new SocketServer(nitroApp);
 
   // creo los servicios
   const userRepository = new PrimsaUserRepository();
   const carRepository = new PrismaCarRepository();
-  const inMemoryRaceRepository = new InMemoryRaceRepository(cache);
+  const inMemoryRaceRepository = new InMemoryRaceRepository();
 
   // creo las acciones
   const actions: Actions = {

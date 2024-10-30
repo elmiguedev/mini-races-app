@@ -3,10 +3,9 @@ import { User } from "../user/User";
 import { PlayerRaceInfo } from "./PlayerRaceInfo";
 import { PlayerStatus } from "./PlayerStatus";
 
-export interface Player {
+export interface PlayerData {
   socketId: string;
-  user: User;
-  car: Car;
   status: PlayerStatus;
+  name: string;
   playerRaceInfo: PlayerRaceInfo;
 }

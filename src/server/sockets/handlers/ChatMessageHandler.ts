@@ -9,14 +9,12 @@ export class ChatMessageHandler {
   ) { }
 
   public async handle(socket: Socket, message: string) {
-    console.log(">> el handler", message)
     const user = this.socketServer.sockets[socket.id].user;
     const race = await this.action.execute({
-      userId: user.id,
+      socketId: socket.id,
       message: message,
-      raceId: user.raceId
+      userId: user.id
     })
-    console.log(">> el user", user)
     this.socketServer.emitToRoom(race.id, "room_chat", {
       message: message,
       name: user.name

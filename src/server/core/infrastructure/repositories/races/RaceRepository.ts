@@ -1,9 +1,9 @@
-import { Race } from "../../../domain/race/Race";
+import { ServerRaceEntity } from "../../../entities/ServerRaceEntity";
 
 export interface RaceRepository {
-  create(race: Race): Promise<Race>;
-  getAll(): Promise<Race[]>;
-  getById(id: string): Promise<Race | undefined>;
-  getByUserId(userId: number): Promise<Race | undefined>;
-  deleteRace(race: Race): Promise<Race>;
+  create(): Promise<ServerRaceEntity>;
+  getAll(): Promise<ServerRaceEntity[]>;
+  getById(id: string): Promise<ServerRaceEntity | undefined>;
+  getByUserId(userId: number): Promise<ServerRaceEntity | undefined>;
+  deleteRace(id: string): Promise<ServerRaceEntity>;
 }

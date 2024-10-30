@@ -1,4 +1,4 @@
-import { Race } from "~/server/core/domain/race/Race";
+import { Race } from "~/server/core/domain/race/RaceData";
 import { PlayerEntity } from "./PlayerEntity";
 import { Scene } from "phaser";
 import { TrackEntity } from "./TrackEntity";

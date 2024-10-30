@@ -1,6 +1,4 @@
-import { Player } from "../../domain/race/Player";
-import { Race } from "../../domain/race/Race";
-import { User } from "../../domain/user/User";
+import { RaceData } from "../../domain/race/RaceData";
 import { RaceRepository } from "../../infrastructure/repositories/races/RaceRepository";
 import { UserRepository } from "../../infrastructure/repositories/user/UserRepository";
 import { Action } from "../Action";
@@ -11,13 +9,13 @@ export interface JoinRaceActionParams {
   socketId: string;
 }
 
-export class JoinRaceAction implements Action<JoinRaceActionParams, Race> {
+export class JoinRaceAction implements Action<JoinRaceActionParams, RaceData> {
   constructor(
     private readonly raceRepository: RaceRepository,
     private readonly userRepository: UserRepository
   ) { }
 
-  public async execute(params: JoinRaceActionParams): Promise<Race> {
+  public async execute(params: JoinRaceActionParams): Promise<RaceData> {
     const race = await this.raceRepository.getById(params.raceId);
     const user = await this.userRepository.findById(params.userId);
     if (!race) {
@@ -28,34 +26,13 @@ export class JoinRaceAction implements Action<JoinRaceActionParams, Race> {
       throw new Error("User not found");
     }
 
-    const player = this.createPlayer(user, params.socketId);
+    race.addPlayer(
+      params.socketId,
+      user
+    )
 
-    race.players.push(player);
-    return race;
+    return race.getData();
   }
 
-  private createPlayer(user: User, socketId: string): Player {
-    return {
-      socketId: socketId,
-      user,
-      car: {
-        color: "red",
-        id: user.id!,
-        userId: user.id!,
-      },
-      status: "lobby",
-      playerRaceInfo: {
-        acceleration: 0,
-        angle: 0,
-        bestLapTime: 0,
-        currentCheckpoint: 0,
-        currentCheckpointTime: 0,
-        currentLap: 0,
-        currentLapTime: 0,
-        position: { x: 0, y: 0 },
-        racePosition: 0,
-        velocity: 0,
-      },
-    }
-  }
+
 }

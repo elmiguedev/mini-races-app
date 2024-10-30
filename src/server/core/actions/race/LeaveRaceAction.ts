@@ -1,4 +1,4 @@
-import { Race } from "../../domain/race/Race";
+import { RaceData } from "../../domain/race/RaceData";
 import { RaceRepository } from "../../infrastructure/repositories/races/RaceRepository";
 import { Action } from "../Action";
 
@@ -6,25 +6,23 @@ export interface LeaveRaceActionParams {
   userId: number;
 }
 
-export class LeaveRaceAction implements Action<LeaveRaceActionParams, Race> {
+export class LeaveRaceAction implements Action<LeaveRaceActionParams, RaceData> {
   constructor(
     private readonly raceRepository: RaceRepository,
   ) { }
 
-  public async execute(params: LeaveRaceActionParams): Promise<Race> {
+  public async execute(params: LeaveRaceActionParams): Promise<RaceData> {
     const race = await this.raceRepository.getByUserId(params.userId);
     if (!race) {
       throw new Error("Race not found");
     }
 
-    race.players = race.players.filter(
-      (player) => player.user.id !== params.userId
-    );
+    race.removePlayerByUserId(params.userId);
 
-    if (race.players.length === 0) {
-      await this.raceRepository.deleteRace(race);
+    if (race.getPlayersCount() === 0) {
+      await this.raceRepository.deleteRace(race.getId());
     }
 
-    return race;
+    return race.getData();
   }
 }

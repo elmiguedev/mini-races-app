@@ -24,7 +24,7 @@ import Game from "../../../components/game/index.vue";
 import ChatBox from "../../../components/ChatBox.vue";
 import LobbyPlayer from '~/components/LobbyPlayer.vue';
 
-import type { Race } from '../../../server/core/domain/race/Race';
+import type { Race } from '../../../server/core/domain/race/RaceData';
 import { useRoute } from 'vue-router';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { SocketManager } from '../../../services/socket/SocketManager';

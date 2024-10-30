@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
     console.log(">> el user session", user)
     const { createRaceAction } = useActions();
     const race = await createRaceAction.execute();
-    return race;
+    return race.getData();
   } catch (error) {
     console.error("Error handling signup request:", error);
     return createError({

@@ -1,20 +1,90 @@
 import { World } from "planck";
-import { Race } from "../domain/race/Race";
-import { PlayerEntity } from "./PlayerEntity";
+import { RaceStatus } from "../domain/race/RaceStatus";
+import { ChatMessage } from "../domain/race/ChatMessage";
+import { ServerPlayerEntity } from "./ServerPlayerEntity";
+import { RaceData } from "../domain/race/RaceData";
+import { PlayerData } from "../domain/race/PlayerData";
+import { User } from "../domain/user/User";
+import crypto from "node:crypto";
 
 export class ServerRaceEntity {
-  public race: Race;
+  private id: string;
+  private maxPlayers: number;
+  private createdAt: Date;
+  private status: RaceStatus;
+  private chats: ChatMessage[];
   private world: World;
-  private players: Record<string, PlayerEntity> = {};
+  private players: Record<string, ServerPlayerEntity>;
 
-  constructor(race: Race) {
-    this.race = race;
+  constructor() {
+    this.id = this.generateId();
+    this.maxPlayers = 4;
+    this.players = {};
+    this.createdAt = new Date();
+    this.status = "lobby";
     this.world = new World();
-    this.race.players.forEach((player) => {
-      this.players[player.socketId] = new PlayerEntity(player);
-    })
+    this.chats = [];
   }
 
+  public getId() {
+    return this.id;
+  }
+
+  public getData(): RaceData {
+    return {
+      id: this.id,
+      maxPlayers: this.maxPlayers,
+      players: this.getPlayersData(),
+      createdAt: this.createdAt,
+      status: this.status,
+      chats: this.chats
+    };
+  }
+
+  public hasUserId(userId: number): boolean {
+    return Object.values(this.players).some((player) => player.getUserId() === userId);
+  }
+
+  public addPlayer(socketId: string, user: User) {
+    const player = new ServerPlayerEntity({
+      socketId,
+      user,
+      world: this.world,
+    });
+    this.players[socketId] = player;
+  }
+
+  public removePlayerByUserId(userId: number) {
+    Object.keys(this.players).forEach((key) => {
+      if (this.players[key].getUserId() === userId) {
+        delete this.players[key];
+      }
+    });
+  }
+
+  public getPlayersCount(): number {
+    return Object.keys(this.players).length;
+  }
+
+  public getPlayerBySocketId(socketId: string): ServerPlayerEntity | undefined {
+    return this.players[socketId];
+  }
+
+  public addChatMessage(message: ChatMessage) {
+    this.chats.push(message);
+  }
+
+  private generateId(): string {
+    return crypto.randomUUID();
+  }
+
+  private getPlayersData(): Record<string, PlayerData> {
+    const playersData: Record<string, PlayerData> = {};
+    Object.keys(this.players).forEach((key) => {
+      playersData[key] = this.players[key].getData();
+    });
+    return playersData;
+  }
 
 }
 

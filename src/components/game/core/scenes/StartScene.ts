@@ -1,4 +1,4 @@
-import { Race } from "~/server/core/domain/race/Race";
+import { Race } from "~/server/core/domain/race/RaceData";
 import { SocketManager } from "../../../../services/socket/SocketManager";
 import CarPng from "../assets/sprites/car.png";
 import MapPng from "../assets/img/map.png";

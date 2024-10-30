@@ -1,26 +1,38 @@
 import { ChatMessage } from "../../domain/race/ChatMessage";
-import { Race } from "../../domain/race/Race";
+import { RaceData } from "../../domain/race/RaceData";
 import { RaceRepository } from "../../infrastructure/repositories/races/RaceRepository";
 import { Action } from "../Action";
 
 export interface SendChatMessageActionParams {
+  socketId: string;
   message: string;
   userId: number;
-  raceId: string;
 }
-export class SendChatMessageAction implements Action<SendChatMessageActionParams, Race> {
+export class SendChatMessageAction implements Action<SendChatMessageActionParams, RaceData> {
   constructor(
     private readonly raceRepository: RaceRepository
   ) { }
 
-  public async execute(params: SendChatMessageActionParams): Promise<Race> {
+  public async execute(params: SendChatMessageActionParams): Promise<RaceData> {
     const race = await this.raceRepository.getByUserId(params.userId);
-    const player = race?.players.find((player) => player.user.id === params.userId);
+
+    if (!race) {
+      throw new Error("Race not found");
+    }
+
+    const player = race.getPlayerBySocketId(params.socketId);
+
+    if (!player) {
+      throw new Error("Player not found");
+    }
+
     const chatMessage: ChatMessage = {
-      name: player!.user.name,
+      name: player.getData().name,
       message: params.message
     }
-    race!.chats.push(chatMessage);
-    return race!;
+
+    race.addChatMessage(chatMessage);
+
+    return race.getData();
   }
 }

@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   const response: GetRacesResponse[] = races.map((race) => {
     return {
       id: race.id,
-      players: `${race.players.length} / ${race.maxPlayers}`,
+      players: `${Object.keys(race.players).length} / ${race.maxPlayers}`,
       createdAt: race.createdAt,
       status: race.status
     }

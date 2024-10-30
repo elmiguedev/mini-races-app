@@ -7,7 +7,7 @@
           <img src="https://gravatar.com/avatar/99dc667e4344f1b75fa4e0a65808c293?s=400&d=robohash&r=x" alt="User Avatar"
             class="w-full h-full object-cover" />
         </div>
-        <span class="font-mono">{{ player?.user.name }}</span>
+        <span class="font-mono">{{ player?.name }}</span>
       </div>
 
       <div>
@@ -18,10 +18,10 @@
 </template>
 <script setup lang="ts">
 import { PropType } from 'vue';
-import type { Player } from '../server/core/domain/race/Player';
+import type { PlayerData } from '../server/core/domain/race/PlayerData';
 
 defineProps({
-  player: Object as PropType<Player>,
+  player: Object as PropType<PlayerData>,
 })
 
 </script>

@@ -1,5 +1,5 @@
 import { RaceRepository } from "../../infrastructure/repositories/races/RaceRepository";
-import { Race } from "../../domain/race/Race";
+import { Race } from "../../domain/race/RaceData";
 import { Action } from "../Action";
 
 export interface PlayerInRaceActionParams {

@@ -1,4 +1,4 @@
-import { Race } from "~/server/core/domain/race/Race";
+import { Race } from "~/server/core/domain/race/RaceData";
 import { RaceEntity } from "../entities/RaceEntity";
 
 export interface RaceSceneProps {

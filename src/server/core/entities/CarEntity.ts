@@ -1,4 +1,4 @@
-import { Race } from "../domain/race/Race";
+import { Race } from "../domain/race/RaceData";
 
 export class ServerRaceEntity {
   public race: Race;
