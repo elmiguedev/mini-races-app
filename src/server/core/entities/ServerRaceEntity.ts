@@ -100,6 +100,10 @@ export class ServerRaceEntity {
     return this.status;
   }
 
+  public iterate() {
+    this.world.step(1 / 60);
+  }
+
   private generateId(): string {
     return crypto.randomUUID();
   }

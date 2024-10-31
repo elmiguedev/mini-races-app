@@ -13,6 +13,7 @@ import { GetRacesAction } from "../core/actions/race/GetRacesAction";
 import { JoinRaceAction } from "../core/actions/race/JoinRaceAction";
 import { LeaveRaceAction } from "../core/actions/race/LeaveRaceAction";
 import { PlayerInRaceAction } from "../core/actions/race/PlayerInRaceAction";
+import { PlayerMoveAction } from "../core/actions/race/PlayerMoveAction";
 import { PlayerReadyAction } from "../core/actions/race/PlayerReadyAction";
 import { SendChatMessageAction } from "../core/actions/race/SendChatMessageAction";
 import { GetUserAction } from "../core/actions/users/GetUserAction";
@@ -28,6 +29,7 @@ import { ChatMessageHandler } from "../sockets/handlers/ChatMessageHandler";
 import { DisconnectHandler } from "../sockets/handlers/DisconnectHandler";
 import { JoinRaceHandler } from "../sockets/handlers/JoinRaceHandler";
 import { PlayerInRaceHandler } from "../sockets/handlers/PlayerInRaceHandler";
+import { PlayerMoveHandler } from "../sockets/handlers/PlayerMoveHandler";
 import { PlayerReadyHandler } from "../sockets/handlers/PlayerReadyHandler";
 import { RaceStatusHandler } from "../sockets/handlers/RaceStatusHandler";
 import { SocketServer } from "../sockets/SocketServer";
@@ -62,7 +64,8 @@ export default defineNitroPlugin(async (nitroApp: any) => {
     getCarByUserIdAction: new GetCarByUserIdAction(carRepository),
     sendChatMessageAction: new SendChatMessageAction(inMemoryRaceRepository),
     playerReadyAction: new PlayerReadyAction(inMemoryRaceRepository),
-    playerInRaceAction: new PlayerInRaceAction(inMemoryRaceRepository)
+    playerInRaceAction: new PlayerInRaceAction(inMemoryRaceRepository),
+    playerMoveAction: new PlayerMoveAction(inMemoryRaceRepository),
   };
 
   // inyecto las acciones en el server
@@ -75,10 +78,22 @@ export default defineNitroPlugin(async (nitroApp: any) => {
   socketServer.addSocketHandler("room_chat", new ChatMessageHandler(socketServer, actions.sendChatMessageAction));
   socketServer.addSocketHandler("player_ready", new PlayerReadyHandler(socketServer, actions.playerReadyAction));
   socketServer.addSocketHandler("player_in_race", new PlayerInRaceHandler(socketServer, actions.playerInRaceAction));
+  socketServer.addSocketHandler("player_move", new PlayerMoveHandler(socketServer, actions.playerMoveAction));
 
   // inicializo los servicios
   socketServer.init();
 
-  // log info
+  // draft: race tick
   console.log(">> Services Plugin loaded");
+
+  const tickTime = 1000 / 60;
+  setInterval(async () => {
+    const races = await inMemoryRaceRepository.getAll();
+    for (const race of races) {
+      if (race.getStatus() === "countdown" || race.getStatus() === "running") {
+        race.iterate();
+        socketServer.emitToRoom(race.getId(), "race_status", race.getData());
+      }
+    }
+  }, tickTime)
 });

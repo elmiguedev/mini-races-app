@@ -54,6 +54,9 @@ export class ServerPlayerEntity {
   }
 
   public getData(): PlayerData {
+    // this.playerRaceInfo.angle = this.body.getAngle() * 180 / Math.PI;
+    // this.playerRaceInfo.position.x = this.body.getPosition().x;
+    // this.playerRaceInfo.position.y = this.body.getPosition().y;
     return {
       name: this.user.name,
       socketId: this.socketId,
@@ -76,5 +79,31 @@ export class ServerPlayerEntity {
 
   public getStatus(): PlayerStatus {
     return this.status;
+  }
+
+  public accelerate() {
+    // const cosx = Math.cos(this.body.getAngle());
+    // const sinx = Math.sin(this.body.getAngle());
+    // const acc = 26;
+    // this.body.applyLinearImpulse(
+    //   Vec2(cosx * acc, sinx * acc),
+    //   this.body.getWorldCenter(),
+    // )
+    const dx = Math.cos(this.playerRaceInfo.angle);
+    const dy = Math.sin(this.playerRaceInfo.angle);
+    this.playerRaceInfo.position.x += 10 * dx;
+    this.playerRaceInfo.position.y += 10 * dy;
+  }
+
+  public turnLeft() {
+    // const currentAngle = this.body.getAngle();
+    // this.body.setAngle(currentAngle - 0.05);
+    this.playerRaceInfo.angle += 0.05;
+  }
+
+  public turnRight() {
+    // const currentAngle = this.body.getAngle();
+    // this.body.setAngle(currentAngle + 0.05);
+    this.playerRaceInfo.angle -= 0.05;
   }
 }

@@ -1,3 +1,4 @@
+import { useNitroApp } from "#imports"
 import { CreatePartModelAction } from "../core/actions/car/CreatePartModelAction";
 import { GetPartModelsAction } from "../core/actions/car/GetPartModelsAction";
 import { CreateRaceAction } from "../core/actions/race/CreateRaceAction";
@@ -10,7 +11,6 @@ import { GetUserAction } from "../core/actions/users/GetUserAction";
 import { GetUsersAction } from "../core/actions/users/GetUsersAction";
 import { LoginAction } from "../core/actions/users/LoginAction";
 import { RegisterUserAction } from "../core/actions/users/RegisterUserAction";
-import { useNitroApp } from "#imports"
 import { BuyPartModelAction } from "../core/actions/car/BuyPartModelAction";
 import { GetUserCarPartsAction } from "../core/actions/car/GetUserCarPartsAction";
 import { SetCarPartAction } from "../core/actions/car/SetCarPartAction";
@@ -19,6 +19,7 @@ import { GetCarByUserIdAction } from "../core/actions/car/GetCarByUserIdAction";
 import { SendChatMessageAction } from "../core/actions/race/SendChatMessageAction";
 import { PlayerReadyAction } from "../core/actions/race/PlayerReadyAction";
 import { PlayerInRaceAction } from "../core/actions/race/PlayerInRaceAction";
+import { PlayerMoveAction } from "../core/actions/race/PlayerMoveAction";
 
 export interface Actions {
   registerUserAction: RegisterUserAction;
@@ -41,6 +42,7 @@ export interface Actions {
   sendChatMessageAction: SendChatMessageAction;
   playerReadyAction: PlayerReadyAction;
   playerInRaceAction: PlayerInRaceAction;
+  playerMoveAction: PlayerMoveAction;
 }
 
 export function useActions(): Actions {

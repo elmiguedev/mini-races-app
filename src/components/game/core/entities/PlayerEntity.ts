@@ -19,6 +19,12 @@ export class PlayerEntity {
     this.sprite.setDepth(5);
   }
 
+  public updatePlayerData(player: PlayerData) {
+    this.player = player;
+    this.sprite.setPosition(player.playerRaceInfo.position.x, player.playerRaceInfo.position.y);
+    this.sprite.setAngle(player.playerRaceInfo.angle);
+  }
+
   // public state: Car;
   // public scene: Scene;
   // public sprite!: Phaser.GameObjects.Sprite;

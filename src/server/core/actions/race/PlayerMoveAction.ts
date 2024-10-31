@@ -1,4 +1,4 @@
-import { Player } from "../../domain/race/PlayerData";
+import { PlayerData } from "../../domain/race/PlayerData";
 import { RaceRepository } from "../../infrastructure/repositories/races/RaceRepository";
 import { Action } from "../Action";
 
@@ -9,57 +9,36 @@ export interface PlayerMoveActionParams {
   right?: boolean;
 }
 
-export class PlayerMoveAction implements Action<PlayerMoveActionParams, Player> {
+export class PlayerMoveAction implements Action<PlayerMoveActionParams, PlayerData> {
 
   constructor(
     private readonly raceRepository: RaceRepository
   ) { }
 
   public async execute(params: PlayerMoveActionParams) {
-    // TODO: improve to get race from socketid as also the player
+    // TODO: improve to get race from socketid 
     const race = await this.raceRepository.getByUserId(params.userId);
     if (!race) {
       throw new Error("Race not found");
     }
-    const player = race.players.find((player) => player.user.id === params.userId);
+
+    const player = race.getPlayerByUserId(params.userId);
     if (!player) {
       throw new Error("Player not found");
     }
 
     if (params.accelerate) {
-      const cosx = Math.cos(carBody.getAngle());
-      const sinx = Math.sin(carBody.getAngle());
-      const acc = 26;
-      carBody.applyLinearImpulse(
-        Vec2(cosx * acc, sinx * acc),
-        carBody.getWorldCenter(),
-      )
-
-
+      player.accelerate();
     }
 
-    return player
+    if (params.left) {
+      player.turnLeft();
+    }
+
+    if (params.right) {
+      player.turnRight();
+    }
+
+    return player.getData();
   }
 }
-
-// const { up, left, right } = controls;
-//   const carBody: Body = car.body;
-//   if (up) {
-//     const cosx = Math.cos(carBody.getAngle());
-//     const sinx = Math.sin(carBody.getAngle());
-//     const acc = 26;
-//     carBody.applyLinearImpulse(
-//       Vec2(cosx * acc, sinx * acc),
-//       carBody.getWorldCenter(),
-//     )
-//   }
-
-//   if (left) {
-//     const currentAngle = carBody.getAngle();
-//     carBody.setAngle(currentAngle - 0.05);
-//   }
-
-//   if (right) {
-//     const currentAngle = carBody.getAngle();
-//     carBody.setAngle(currentAngle + 0.05);
-//   }

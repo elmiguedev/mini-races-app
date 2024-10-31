@@ -24,13 +24,13 @@ import Game from "../../../components/game/index.vue";
 import ChatBox from "../../../components/ChatBox.vue";
 import LobbyPlayer from '~/components/LobbyPlayer.vue';
 
-import type { Race } from '../../../server/core/domain/race/RaceData';
+import type { RaceData } from '../../../server/core/domain/race/RaceData';
 import { useRoute } from 'vue-router';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { SocketManager } from '../../../services/socket/SocketManager';
 const { params } = useRoute();
 const { id } = params;
-const race = ref<Race | undefined>();
+const race = ref<RaceData | undefined>();
 const showGame = ref(false);
 const messages = ref<string[]>([]);
 
@@ -63,7 +63,6 @@ const joinRoom = (id: string) => {
   })
 
   SocketManager.getInstance().on("race_status", (data) => {
-    console.log("race_status", data);
     race.value = data;
     checkRaceReady();
   });

@@ -37,5 +37,21 @@ export class RaceEntity {
     })
   }
 
+  public updateRaceState(race: RaceData) {
+    this.race = race;
+    this.updatePlayers();
+  }
+
+  public movePlayer(controls: any) {
+    if (this.mainCar) {
+
+    }
+  }
+
+  private updatePlayers() {
+    Object.values(this.race.players).forEach((player) => {
+      this.cars[player.socketId].updatePlayerData(player);
+    });
+  }
 
 }
